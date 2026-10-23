@@ -51,7 +51,8 @@ function syncIcon(){ $('playIco').innerHTML = front.paused ? '<path d="M8 5.5v13
 function swap(){ const f = front; front = back; back = f; front.classList.add('on'); back.classList.remove('on'); syncIcon(); }
 // 预取：把接下来几个镜头（含分支和选择点的等待循环）按顺序整段下载进内存，切镜时直接从内存播放，不再等网络。
 // 正在播的镜头若还在走网络、缓冲不足 4 秒，先不预取，带宽全给它。
-const blobs = new Map(), loading = new Set(), failed = new Set(); let want = [];
+const blobs = new Map(), loading = new Map(), failed = new Set(); let want = [];
+const cancel = k => { const c = loading.get(k); if (c){ c.abort(); loading.delete(k); } };
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
 const urlOf = k => k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src;
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
@@ -76,17 +77,19 @@ function warm(root){
   pump();
 }
 function pump(){
-  if (loading.size || !shots) return;
+  if (!shots) return;
   const s = st.shot;
   if (s && front.dataset.id === s.id && !String(front.getAttribute('src')).startsWith('blob:')){
-    const end = bufferedTo(front);
-    if (end - front.currentTime < 4 && end < (front.duration || 0) - .3) return;
+    const end = bufferedTo(front), full = end >= (front.duration || Infinity) - .3, ahead = end - front.currentTime;
+    if (!full && ahead < 2) [...loading.keys()].forEach(cancel);  // 正在播的镜头快断了：停掉所有预取
+    if (!full && ahead < 4) return;
   }
+  if (loading.size) return;
   const k = want.find(k => !blobs.has(k) && !failed.has(k)); if (!k) return;
-  loading.add(k);
-  fetch(urlOf(k)).then(r => { if (!r.ok) throw Error(r.status); return r.blob(); })
-    .then(b => blobs.set(k, URL.createObjectURL(b))).catch(() => failed.add(k))
-    .finally(() => { loading.delete(k); pump(); });
+  const ctl = new AbortController(); loading.set(k, ctl);
+  fetch(urlOf(k), {signal: ctl.signal}).then(r => { if (!r.ok) throw Error(r.status); return r.blob(); })
+    .then(b => blobs.set(k, URL.createObjectURL(b))).catch(e => { if (e.name !== 'AbortError') failed.add(k); })
+    .finally(() => { if (loading.get(k) === ctl) loading.delete(k); pump(); });
 }
 setInterval(pump, 400);
 const nextIds = s => { const x = s.interaction; return x ? (x.type === 'qte' ? [x.target, x.miss] : x.options.map(o => o.target)) : [s.next]; };
@@ -99,6 +102,7 @@ function playShot(id, {offset = 0} = {}){
   mode('playing'); lastKey = ''; if (performance.now() >= holdUntil) showSub(null);
   $('epName').textContent = epLabel(st.ep); $('chap').textContent = `EP${st.ep + 1}`;
   if (!front.classList.contains('on') && s.poster) $('stage').style.backgroundImage = `url(${s.poster})`;  // 视频还没出来时先显示本镜首帧
+  if (!blobs.has(id)) cancel(id);  // 不在内存里就直接走网络，取消重复的预取
   const tok = ++loadTok, v = back;
   v.loop = false; v.muted = false; v.poster = s.poster || '';
   if (v.dataset.id !== id || v.getAttribute('src') !== srcFor(id)){ v.dataset.id = id; v.src = srcFor(id); }
@@ -137,7 +141,9 @@ function epIntro(i, prev){
   $('epNum').textContent = `EPISODE ${i + 1}`; $('epT').textContent = EN ? E.en : `第 ${i + 1} 集 · ${E.zh}`; $('epTe').textContent = EN ? '' : E.en;
   $('epCard').hidden = false; warm(E.entry); save(E.entry, true);
   const go = () => { clearTimeout(epTimer); $('epCard').hidden = true; playShot(E.entry); };
-  clearTimeout(epTimer); epTimer = setTimeout(go, 3500);
+  // 自动继续：卡片停 3.5 秒后，等第一镜下载进内存再开播（最多再等 8 秒）；手动点「继续观看」立即开始
+  const t0 = performance.now(), auto = () => { if (blobs.has(E.entry) || failed.has(E.entry) || performance.now() - t0 > 11500) go(); else epTimer = setTimeout(auto, 300); };
+  clearTimeout(epTimer); epTimer = setTimeout(auto, 3500);
   $('epGo').onclick = go;
 }
 
