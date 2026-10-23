@@ -143,7 +143,7 @@ const KW = {
   swim: {A: ['手', '牵', '拉', '一起', 'hand', 'hold', 'together'], B: ['自己', '旁边', '身旁', '身边', 'myself', 'beside', 'own', 'alone']},
 };
 const norm = s => ' ' + s.toLowerCase().replace(/[’']/g, "'").replace(/[^\p{L}\p{N}' ]+/gu, ' ').replace(/\s+/g, ' ') + ' ';
-const hit = (t, k) => /[一-鿿]/.test(k) ? t.includes(k) : t.includes(' ' + k + ' ') || t.includes(' ' + k);
+const hit = (t, k) => /[\u4e00-\u9fff]/.test(k) ? t.includes(k) : t.includes(' ' + k + ' ') || t.includes(' ' + k);
 async function localResponder(text, ctx){
   const t = norm(text), kw = KW[ctx.interaction.key] || {};
   const pick = ctx.options.findIndex(o => (kw[o.value] || []).some(k => hit(t, k)));
@@ -156,7 +156,7 @@ $('say').addEventListener('submit', async e => {
   e.preventDefault();
   const raw = $('sayIn').value.trim(), s = st.shot; if (!raw || !s || !s.interaction || s.interaction.type === 'qte') return;
   $('sayIn').value = ''; $('sayBtn').disabled = true;
-  showSub(/[一-鿿]/.test(raw) && !EN ? {zh: raw, speaker: 'SKY'} : {en: raw, speaker: 'SKY'});
+  showSub(/[\u4e00-\u9fff]/.test(raw) && !EN ? {zh: raw, speaker: 'SKY'} : {en: raw, speaker: 'SKY'});
   const at = s.id; let r = null;
   try { [r] = await Promise.all([responder(raw, ctxNow()), new Promise(ok => setTimeout(ok, 420))]); } catch(err){ console.warn(err); }
   $('sayBtn').disabled = false;
