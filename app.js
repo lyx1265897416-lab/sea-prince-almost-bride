@@ -220,7 +220,10 @@ function chosenNext(s, preview){ const x = s.interaction; if (!x) return s.next;
 function episodePath(preview){ const E = EPS[st.ep]; let id = E.entry; const out = [], seen = new Set(); while (id && shots[id] && !seen.has(id)){ const s = shots[id]; if (s.episode !== E.id) break; seen.add(id); out.push(s); id = chosenNext(s, preview); } return out; }
 const track = $('track'); let dragging = false, swallow = false;
 function setBar(p){ const pc = Math.max(0, Math.min(100, p * 100)); $('fill').style.width = pc + '%'; $('knob').style.left = pc + '%'; track.setAttribute('aria-valuenow', Math.round(pc)); }
-function barNow(){ const s = st.shot; if (!s) return 0; const all = episodePath(true), i = all.findIndex(p => p.id === s.id); if (i < 0) return 0; const total = all.reduce((a, p) => a + p.duration, 0), before = all.slice(0, i).reduce((a, p) => a + p.duration, 0); return total ? (before + Math.min(s.duration, Math.max(0, front.currentTime - (s.media_in || 0)))) / total : 0; }
+function epClock(){ const s = st.shot; if (!s) return {elapsed: 0, total: 0}; const all = episodePath(true), i = all.findIndex(p => p.id === s.id); if (i < 0) return {elapsed: 0, total: 0}; const total = all.reduce((a, p) => a + p.duration, 0), before = all.slice(0, i).reduce((a, p) => a + p.duration, 0); return {elapsed: before + Math.min(s.duration, Math.max(0, front.currentTime - (s.media_in || 0))), total}; }
+function barNow(){ const c = epClock(); return c.total ? c.elapsed / c.total : 0; }
+const clockText = x => { const v = Math.max(0, Math.floor(x || 0)); return Math.floor(v / 60) + ':' + String(v % 60).padStart(2, '0'); };
+function showTime(elapsed, total){ const t = clockText(Math.min(elapsed, total)) + ' / ' + clockText(total); if ($('time').textContent !== t) $('time').textContent = t; }
 const fracAt = x => { const r = track.querySelector('i').getBoundingClientRect(); return Math.max(0, Math.min(1, (x - r.left) / r.width)); };
 function seekEpisode(f){
   const all = episodePath(true), ok = episodePath(false), total = all.reduce((a, p) => a + p.duration, 0), limit = ok.reduce((a, p) => a + p.duration, 0);
@@ -232,14 +235,14 @@ function seekEpisode(f){
   else playShot(sel.id, {offset: off});
 }
 track.addEventListener('pointerdown', e => { if (!st.shot) return; dragging = true; track.classList.add('drag'); track.setPointerCapture(e.pointerId); setBar(fracAt(e.clientX)); e.preventDefault(); });
-track.addEventListener('pointermove', e => { if (dragging) setBar(fracAt(e.clientX)); });
+track.addEventListener('pointermove', e => { if (dragging){ const f = fracAt(e.clientX), c = epClock(); setBar(f); showTime(f * c.total, c.total); } });
 track.addEventListener('pointerup', e => { if (!dragging) return; dragging = false; track.classList.remove('drag'); seekEpisode(fracAt(e.clientX)); });
 track.addEventListener('pointercancel', () => { dragging = false; track.classList.remove('drag'); });
 track.addEventListener('keydown', e => { if (!st.shot || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return; e.preventDefault(); seekEpisode(barNow() + (e.key === 'ArrowRight' ? .04 : -.04)); });
 (function loop(now){
   const s = st.shot, playing = document.body.classList.contains('playing');
   if (playing && s && !front.paused && front.currentTime >= (s.media_out || front.duration || 1e9) - .04) onEnd();
-  if (playing && !dragging) setBar(barNow());
+  if (playing && !dragging){ const c = epClock(); setBar(c.total ? c.elapsed / c.total : 0); showTime(c.elapsed, c.total); }
   if (document.body.classList.contains('choosing') && s && s.interaction && s.interaction.type === 'qte' && !document.hidden && $('menu').hidden){
     qteLeft = Math.max(0, qteLeft - Math.min(now - qteStamp, 100)); $('clock').firstChild.style.width = (qteLeft / (s.interaction.seconds * 1000) * 100) + '%';
     if (qteLeft === 0) choose({target: s.interaction.miss, value: 'miss'});
