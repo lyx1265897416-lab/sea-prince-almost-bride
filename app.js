@@ -57,6 +57,7 @@ function playShot(id, {offset = 0} = {}){
   st.shot = s; st.doneId = null; st.ep = epIndex(s.episode); markReached(st.ep);
   mode('playing'); lastKey = ''; if (performance.now() >= holdUntil) showSub(null);
   $('epName').textContent = epLabel(st.ep); $('chap').textContent = `EP${st.ep + 1}`;
+  if (!front.classList.contains('on') && s.poster) $('stage').style.backgroundImage = `url(${s.poster})`;  // 视频还没出来时先显示本镜首帧
   const tok = ++loadTok, v = back;
   v.loop = false; v.muted = false; v.poster = s.poster || '';
   if (v.dataset.id !== id){ v.dataset.id = id; v.src = s.src; }
