@@ -1,19 +1,80 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111b29"><title>The Sea Prince’s Almost Bride · Your eyes · Your touch</title><link rel="stylesheet" href="style.css"></head>
-<body><main id="stage" aria-label="Interactive story">
-  <div id="picture"><video class="film is-active" id="film" playsinline preload="auto" poster="assets/pov-cover.jpg"></video><video class="film" id="film-buffer" playsinline preload="auto" aria-hidden="true"></video><div id="shade"></div><div id="captions" aria-live="off"></div><div id="transition"></div></div>
-  <header><button id="episodes-open" aria-label="Episodes"><span id="chapter">01 · THE TIDE GATE</span> <span>⌄</span></button><div class="tools"><button id="locale" aria-label="Change language">中文</button><button id="pause" aria-label="Pause">Ⅱ</button></div></header>
-  <div id="progress"><i></i></div>
-  <section id="transport" hidden><div class="transport-row"><span id="time">0:00 / 0:00</span><button id="speed-open" aria-label="Playback speed">1×</button></div><button id="seek" role="slider" aria-label="Episode progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="seek-track"><i id="seek-fill"></i><b id="seek-thumb"></b></span></button><div id="seek-hint"></div></section>
-  <section id="panel" class="sheet" role="dialog" aria-modal="true" aria-labelledby="panel-title" hidden><div class="sheet-head"><h2 id="panel-title"></h2><button id="panel-close" aria-label="Close">×</button></div><div id="panel-options"></div></section>
-  <section id="cover" class="overlay"><div class="eyebrow" data-en="SKYE’S FIRST-PERSON STORY" data-zh="女主第一人称互动剧">AN INTERACTIVE ROMANCE</div><h1><small>The Sea Prince’s</small>Almost<br><em>Bride</em></h1><p class="tagline" data-en="He is looking at you. Decide how close he gets." data-zh="让他走进你的视线，也让他回应你的选择。">Find a friend. Become an unexpected bride.</p><button id="start" class="primary" data-en="Meet him" data-zh="走近他">Enter the tide gate</button><button id="continue-story" class="secondary" hidden data-en="Continue your story" data-zh="继续上次的故事">Continue your story</button><p class="hint" data-en="Five episodes · Your eyes · Your choices" data-zh="新版 · 女主 POV · 点击互动">New cut · First person · Click to respond</p></section>
-  <section id="decision" hidden><div class="decision-kicker" data-en="YOUR MOMENT" data-zh="由你决定">YOUR MOMENT</div><h2></h2><div id="options"></div><div id="clock" hidden><i></i></div></section>
-  <section id="paused" class="center-overlay" hidden><button id="resume" class="primary" data-en="Continue" data-zh="继续播放">Continue</button></section>
-  <section id="error" class="center-overlay" hidden><p data-en="The next moment could not load." data-zh="下一段暂时加载失败。">The next moment could not load.</p><button id="retry" class="primary" data-en="Try again" data-zh="重新加载">Try again</button></section>
-  <div id="loading" hidden><span></span><p data-en="The tide is turning…" data-zh="潮水正在转向……">The tide is turning…</p></div>
-  <section id="episode-end" class="episode-complete" role="dialog" aria-modal="true" aria-labelledby="episode-end-title" hidden>
-    <div class="episode-end-card"><div class="eyebrow" data-en="EPISODE COMPLETE" data-zh="本集结束">EPISODE COMPLETE</div><h2 id="episode-end-title"></h2><p id="next-episode-title"></p><button id="next-episode" class="primary" data-en="Next episode" data-zh="下一集">Next episode</button><button id="replay-episode" class="secondary" data-en="Replay this episode" data-zh="重看本集">Replay this episode</button><button id="episode-menu" class="secondary" data-en="Choose an episode" data-zh="选集">Choose an episode</button></div>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090f19">
+<title>The Sea Prince’s Almost Bride</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css?v=33">
+</head><body>
+<div id="stage">
+  <video class="v" id="va" playsinline webkit-playsinline preload="auto"></video>
+  <video class="v" id="vb" playsinline webkit-playsinline preload="auto"></video>
+  <video class="v" id="vidle" playsinline webkit-playsinline muted loop preload="auto" aria-hidden="true"></video>
+  <div class="shade"></div>
+  <div id="paused" hidden><div><svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><path d="M8 5.5v13l10.5-6.5z"/></svg></div></div>
+  <header id="top">
+    <div class="brand"><b>Rian</b><span id="epName">The Sea Prince’s Almost Bride</span></div>
+    <button class="icon" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="#e8edf4" stroke-width="1.8" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+  </header>
+  <nav id="menu" hidden>
+    <div class="lab"><span class="only-zh">选集</span><span class="only-en">Episodes</span></div>
+    <div class="hint" id="epHint"></div>
+    <div id="epList"></div>
+    <div class="sep"></div>
+    <button id="mSub" hidden><span>字幕</span><small id="mSubV"></small></button>
+    <button id="mBack"><span><span class="only-zh">返回上一个选择</span><span class="only-en">Back to last choice</span></span></button>
+    <button id="mRestart"><span><span class="only-zh">从头开始</span><span class="only-en">Start over</span></span></button>
+  </nav>
+  <div id="subs" aria-live="polite"></div>
+  <div id="bar">
+    <button class="icon" id="playBtn" aria-label="Pause"><svg viewBox="0 0 24 24" fill="#eef2f7" id="playIco"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+    <div id="track" role="slider" tabindex="0" aria-label="Episode progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i><b id="fill"></b><s id="knob"></s></i></div>
+    <div id="chap"></div>
+    <div id="speedWrap"><button id="speedBtn" aria-label="Playback speed" aria-expanded="false">1.0x</button><div id="speedMenu" hidden></div></div>
+  </div>
+  <section id="sheet" aria-label="Your choice">
+    <div class="cue" id="cue"></div>
+    <div id="clock" hidden><i></i></div>
+    <div id="opts"></div>
+    <form id="say" autocomplete="off">
+      <input id="sayIn" maxlength="120" placeholder="或者，用你自己的话对他说…" aria-label="Say something to Rian">
+      <button id="sayBtn" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+    </form>
   </section>
-  <section id="ending" class="overlay" hidden><div class="eyebrow" data-en="TO BE CONTINUED" data-zh="待续">TO BE CONTINUED</div><h2 id="ending-title"></h2><p id="result"></p><p id="memories" class="tagline"></p><button id="other-ending" class="primary" hidden data-en="Explore the other ending" data-zh="体验另一个结局">Explore the other ending</button><button id="replay" class="secondary" data-en="Start a new story" data-zh="重新开始故事">Start a new story</button></section>
-  <footer hidden><span id="shot-status"></span><button id="restart" data-en="Restart" data-zh="重新开始">Restart</button></footer>
-</main><script src="app.js"></script></body></html>
+
+  <section class="card" id="startCard">
+    <div class="kicker">Interactive Series<span class="only-zh"> · 互动短剧</span></div>
+    <h1>He just called you his <em>bride.</em></h1>
+    <p class="only-zh">潮水把你卷进了人鱼王宫。为了带朋友回家，你只能先当他的假新娘。每一个选择，都由你来做。</p>
+    <p class="only-en">A tide gate pulls you into a mer-palace. To get your friend home, you play the prince’s pretend bride. Every choice is yours.</p>
+    <div class="meta" id="meta"></div>
+    <button class="cta" id="startBtn" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg><span class="only-zh">开始观看</span><span class="only-en">Watch</span></button>
+    <button class="cta ghost" id="resumeBtn" hidden><span class="only-zh">继续上次的故事</span><span class="only-en">Continue your story</span></button>
+  </section>
+
+  <section class="card" id="epCard" hidden>
+    <div class="done" id="epDone"></div>
+    <div class="num" id="epNum"></div>
+    <div class="t" id="epT"></div>
+    <div class="te" id="epTe"></div>
+    <button class="cta" id="epGo"><span class="only-zh">继续观看</span><span class="only-en">Continue</span></button>
+  </section>
+
+  <section class="card" id="endCard" hidden>
+    <div class="kicker" id="endKicker"></div>
+    <h1>To be <em>continued</em></h1>
+    <p class="only-zh">下一集制作中。他已经在码头另一端等你了。</p>
+    <p class="en">The next episode is on its way. He is already waiting at the end of the dock.</p>
+    <ul class="path" id="endPath"></ul>
+    <div class="row">
+      <button class="cta ghost" id="endBack"><span class="only-zh">换个选择</span><span class="only-en">Change a choice</span></button>
+      <button class="cta ghost" id="endEps"><span class="only-zh">选集</span><span class="only-en">Episodes</span></button>
+    </div>
+    <button class="cta" id="endRestart"><span class="only-zh">从头再看</span><span class="only-en">Watch again</span></button>
+  </section>
+  <div id="toast" hidden></div>
+</div>
+<script src="app.js?v=33"></script>
+</body></html>
