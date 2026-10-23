@@ -49,8 +49,25 @@ function tick(){
 // playback
 function syncIcon(){ $('playIco').innerHTML = front.paused ? '<path d="M8 5.5v13l10.5-6.5z"/>' : '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>'; if (!front.paused) $('paused').hidden = true; }
 function swap(){ const f = front; front = back; back = f; front.classList.add('on'); back.classList.remove('on'); syncIcon(); }
-const warmed = {}; const keep = [];
-function warm(ids){ ids.forEach(id => { const s = shots[id]; if (!s || warmed[id]) return; warmed[id] = 1; const v = document.createElement('video'); v.preload = 'auto'; v.muted = true; v.src = s.src; v.load(); keep.push(v); if (keep.length > 6) delete warmed[keep.shift().dataset.id]; v.dataset.id = id; }); }
+// 预取：正在播的镜头缓冲够 6 秒后，才按顺序一次预取一段；它缓冲不足 3 秒时先停掉其他预取，带宽全给它
+const warmed = {}; const keep = []; let warmQueue = [];
+const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
+const loaded = v => v.readyState >= 4 && bufferedTo(v) >= (v.duration || Infinity) - .3;
+const fetching = v => !!v.getAttribute('src') && v.networkState === HTMLMediaElement.NETWORK_LOADING && !loaded(v);
+function warm(ids){ warmQueue = ids.filter(id => shots[id] && !warmed[id]); pump(); }
+function pump(){
+  const s = st.shot, cur = s && [front, back].find(v => v.dataset.id === s.id);
+  if (cur && !loaded(cur)){
+    const ahead = bufferedTo(cur) - cur.currentTime;
+    if (ahead < 3) keep.filter(fetching).forEach(v => { v.removeAttribute('src'); v.load(); delete warmed[v.dataset.id]; if (!warmQueue.includes(v.dataset.id)) warmQueue.unshift(v.dataset.id); keep.splice(keep.indexOf(v), 1); });
+    if (ahead < 6) return;
+  }
+  if (keep.some(fetching)) return;
+  const id = warmQueue.shift(); if (!id || warmed[id]) return;
+  warmed[id] = 1; const v = document.createElement('video'); v.preload = 'auto'; v.muted = true; v.dataset.id = id; v.src = shots[id].src; v.load(); keep.push(v);
+  if (keep.length > 6) delete warmed[keep.shift().dataset.id];
+}
+setInterval(pump, 500);
 const nextIds = s => { const x = s.interaction; return x ? (x.type === 'qte' ? [x.target, x.miss] : x.options.map(o => o.target)) : [s.next]; };
 const epIndex = id => Math.max(0, EPS.findIndex(e => e.id === id));
 const epLabel = i => T(`第 ${i + 1} 集 · ${EPS[i].zh}`, `Episode ${i + 1}`);
