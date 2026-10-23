@@ -20,7 +20,10 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;
 const fmt = t => `${Math.floor(t / 60)}:${String(Math.round(t % 60)).padStart(2, '0')}`;
 function mode(m){ document.body.className = document.body.className.replace(/\b(start|choosing|playing|carding|ended)\b/g, '').trim() + ' ' + m; applyLang(); }
 mode('start');
-$('stage').style.backgroundImage = 'url(assets/cover-v32.jpg)';
+// 媒体根地址：页面里有 <meta name="media-base"> 时，视频和图片从该地址加载（Artifact 版用 GitHub Pages 托管的素材）
+const BASE = (document.querySelector('meta[name="media-base"]') || {}).content || '';
+const media = p => p && !/^(https?:|data:)/.test(p) ? BASE + p : p;
+$('stage').style.backgroundImage = `url(${media('assets/cover-v32.jpg')})`;
 
 let data, shots, EPS = [];
 let st = {shot: null, ep: 0, answers: {}, path: [], checkpoint: null, doneId: null};
@@ -267,6 +270,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && doc
 
 applyLang();
 fetch('data.json').then(r => { if (!r.ok) throw Error('data'); return r.json(); }).then(d => {
+  d.shots.forEach(s => { s.src = media(s.src); s.poster = media(s.poster); s.idle_src = media(s.idle_src); });
   data = d; shots = Object.fromEntries(d.shots.map(s => [s.id, s])); EPS = d.episodes;
   const moments = d.shots.filter(s => s.interaction).length;
   const mins = Math.round(EPS.reduce((a, e, i) => a + epLen(i), 0) / 60);

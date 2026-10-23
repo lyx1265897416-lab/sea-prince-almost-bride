@@ -79,7 +79,9 @@ body.choosing #bar,body.carding #bar,body.start #bar,body.ended #bar{display:non
 .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mute);font-family:var(--zh)}
 .meta > span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--acc-deep);margin-right:7px;vertical-align:middle}
 #startCard{background:linear-gradient(to bottom,rgba(6,12,24,.35),transparent 14%,transparent 44%,rgba(6,12,24,.8) 60%,rgba(6,12,24,.97) 78%)}
-#startCard h1{font-size:clamp(42px,12.5vw,58px);line-height:.98}
+#startCard h1{font-size:clamp(44px,15vw,64px);line-height:.95}
+#startCard h1 small{display:block;font-size:.42em;line-height:1.5;letter-spacing:0}
+#startCard h1 span{display:block;white-space:nowrap}
 #epCard{justify-content:center;align-items:center;text-align:center;background:rgba(6,12,24,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 #epCard .num{font-family:var(--body);font-size:12px;letter-spacing:.4em;color:var(--acc)}
 #epCard .t{font-family:var(--zh);font-size:30px;color:#fff;letter-spacing:.14em}
