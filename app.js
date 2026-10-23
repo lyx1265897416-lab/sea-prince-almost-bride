@@ -49,25 +49,46 @@ function tick(){
 // playback
 function syncIcon(){ $('playIco').innerHTML = front.paused ? '<path d="M8 5.5v13l10.5-6.5z"/>' : '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>'; if (!front.paused) $('paused').hidden = true; }
 function swap(){ const f = front; front = back; back = f; front.classList.add('on'); back.classList.remove('on'); syncIcon(); }
-// 预取：正在播的镜头缓冲够 6 秒后，才按顺序一次预取一段；它缓冲不足 3 秒时先停掉其他预取，带宽全给它
-const warmed = {}; const keep = []; let warmQueue = [];
+// 预取：把接下来几个镜头（含分支和选择点的等待循环）按顺序整段下载进内存，切镜时直接从内存播放，不再等网络。
+// 正在播的镜头若还在走网络、缓冲不足 4 秒，先不预取，带宽全给它。
+const blobs = new Map(), loading = new Set(), failed = new Set(); let want = [];
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
-const loaded = v => v.readyState >= 4 && bufferedTo(v) >= (v.duration || Infinity) - .3;
-const fetching = v => !!v.getAttribute('src') && v.networkState === HTMLMediaElement.NETWORK_LOADING && !loaded(v);
-function warm(ids){ warmQueue = ids.filter(id => shots[id] && !warmed[id]); pump(); }
-function pump(){
-  const s = st.shot, cur = s && [front, back].find(v => v.dataset.id === s.id);
-  if (cur && !loaded(cur)){
-    const ahead = bufferedTo(cur) - cur.currentTime;
-    if (ahead < 3) keep.filter(fetching).forEach(v => { v.removeAttribute('src'); v.load(); delete warmed[v.dataset.id]; if (!warmQueue.includes(v.dataset.id)) warmQueue.unshift(v.dataset.id); keep.splice(keep.indexOf(v), 1); });
-    if (ahead < 6) return;
+const urlOf = k => k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src;
+const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
+function lookahead(root){
+  const out = [root], seen = new Set([root]); let layer = [root];
+  for (let d = 0; d <= 3 && layer.length; d++){
+    const nx = [];
+    for (const id of layer){
+      const s = shots[id]; if (!s) continue;
+      if (s.interaction && s.idle_src) out.push(id + '#idle');
+      for (const n of nextIds(s)) if (shots[n] && !seen.has(n)){ seen.add(n); out.push(n); nx.push(n); }
+    }
+    layer = nx;
   }
-  if (keep.some(fetching)) return;
-  const id = warmQueue.shift(); if (!id || warmed[id]) return;
-  warmed[id] = 1; const v = document.createElement('video'); v.preload = 'auto'; v.muted = true; v.dataset.id = id; v.src = shots[id].src; v.load(); keep.push(v);
-  if (keep.length > 6) delete warmed[keep.shift().dataset.id];
+  return out;
 }
-setInterval(pump, 500);
+function warm(root){
+  root = root || (st.shot && st.shot.id); if (!root) return;
+  want = lookahead(root);
+  const busy = new Set([front, back, idle].map(v => v.getAttribute('src')));
+  for (const [k, u] of [...blobs]) if (blobs.size > 16 && !want.includes(k) && !busy.has(u)){ URL.revokeObjectURL(u); blobs.delete(k); }
+  pump();
+}
+function pump(){
+  if (loading.size || !shots) return;
+  const s = st.shot;
+  if (s && front.dataset.id === s.id && !String(front.getAttribute('src')).startsWith('blob:')){
+    const end = bufferedTo(front);
+    if (end - front.currentTime < 4 && end < (front.duration || 0) - .3) return;
+  }
+  const k = want.find(k => !blobs.has(k) && !failed.has(k)); if (!k) return;
+  loading.add(k);
+  fetch(urlOf(k)).then(r => { if (!r.ok) throw Error(r.status); return r.blob(); })
+    .then(b => blobs.set(k, URL.createObjectURL(b))).catch(() => failed.add(k))
+    .finally(() => { loading.delete(k); pump(); });
+}
+setInterval(pump, 400);
 const nextIds = s => { const x = s.interaction; return x ? (x.type === 'qte' ? [x.target, x.miss] : x.options.map(o => o.target)) : [s.next]; };
 const epIndex = id => Math.max(0, EPS.findIndex(e => e.id === id));
 const epLabel = i => T(`第 ${i + 1} 集 · ${EPS[i].zh}`, `Episode ${i + 1}`);
@@ -80,7 +101,7 @@ function playShot(id, {offset = 0} = {}){
   if (!front.classList.contains('on') && s.poster) $('stage').style.backgroundImage = `url(${s.poster})`;  // 视频还没出来时先显示本镜首帧
   const tok = ++loadTok, v = back;
   v.loop = false; v.muted = false; v.poster = s.poster || '';
-  if (v.dataset.id !== id){ v.dataset.id = id; v.src = s.src; }
+  if (v.dataset.id !== id || v.getAttribute('src') !== srcFor(id)){ v.dataset.id = id; v.src = srcFor(id); }
   const go = () => {
     if (tok !== loadTok) return;
     try { v.currentTime = (s.media_in || 0) + offset; } catch(e){}
@@ -90,7 +111,7 @@ function playShot(id, {offset = 0} = {}){
   };
   if (v.readyState >= 1) go(); else v.addEventListener('loadedmetadata', go, {once: true});
   $('paused').hidden = true;
-  warm(nextIds(s)); save(id);
+  warm(id); save(id);
 }
 function onEnd(){
   const s = st.shot; if (!s || st.doneId === s.id) return; st.doneId = s.id; front.pause();
@@ -104,7 +125,7 @@ function onEnd(){
   v.addEventListener('play', () => { if (v === front) syncIcon(); });
   v.addEventListener('pause', () => { if (v === front && !v.ended) syncIcon(); });
 });
-function startIdle(s){ if (!s.idle_src) return; idle.src = s.idle_src; idle.currentTime = 0; idle.play().then(() => { if (st.shot === s && document.body.classList.contains('choosing')) idle.classList.add('on'); }).catch(() => {}); }
+function startIdle(s){ if (!s.idle_src) return; idle.src = srcFor(s.id, true); idle.currentTime = 0; idle.play().then(() => { if (st.shot === s && document.body.classList.contains('choosing')) idle.classList.add('on'); }).catch(() => {}); }
 function hideIdle(){ idle.classList.remove('on'); idle.pause(); }
 
 // episode card
@@ -114,7 +135,7 @@ function epIntro(i, prev){
   st.ep = i; markReached(i); $('epName').textContent = epLabel(i);
   $('epDone').textContent = prev != null && prev < i ? T(`第 ${prev + 1} 集 · 完`, `End of Episode ${prev + 1}`) : '';
   $('epNum').textContent = `EPISODE ${i + 1}`; $('epT').textContent = EN ? E.en : `第 ${i + 1} 集 · ${E.zh}`; $('epTe').textContent = EN ? '' : E.en;
-  $('epCard').hidden = false; warm([E.entry]); save(E.entry, true);
+  $('epCard').hidden = false; warm(E.entry); save(E.entry, true);
   const go = () => { clearTimeout(epTimer); $('epCard').hidden = true; playShot(E.entry); };
   clearTimeout(epTimer); epTimer = setTimeout(go, 3500);
   $('epGo').onclick = go;
@@ -135,7 +156,7 @@ function openChoice(s){
   if (qte){ qteLeft = x.seconds * 1000; qteStamp = performance.now(); }
   busy = true; setTimeout(() => { $('sheet').classList.add('show'); subs.style.bottom = ($('sheet').offsetHeight + 24) + 'px'; }, 150);
   setTimeout(() => busy = false, 500);  // 面板刚出现时不接受点击，防止误触
-  warm(nextIds(s)); save(s.id);
+  warm(s.id); save(s.id);
 }
 function closeChoice(){ $('sheet').classList.remove('show'); subs.style.bottom = ''; voice.pause(); }
 let busy = false;
