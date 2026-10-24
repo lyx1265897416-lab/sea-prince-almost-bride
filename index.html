@@ -6,7 +6,7 @@
 <title>The Sea Prince’s Almost Bride</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500&display=swap">
-<link rel="stylesheet" href="style.css?v=40">
+<link rel="stylesheet" href="style.css?v=41">
 </head><body>
 <div id="stage">
   <video class="v" id="va" playsinline webkit-playsinline preload="auto"></video>
@@ -61,6 +61,7 @@
     <div class="num" id="epNum"></div>
     <div class="t" id="epT"></div>
     <div class="te" id="epTe"></div>
+    <div class="buf" id="epBuf"></div>
     <button class="cta" id="epGo"><span class="only-zh">继续观看</span><span class="only-en">Continue</span></button>
   </section>
 
@@ -76,7 +77,8 @@
     </div>
     <button class="cta" id="endRestart"><span class="only-zh">从头再看</span><span class="only-en">Watch again</span></button>
   </section>
+  <div id="buffering" hidden><span></span></div>
   <div id="toast" hidden></div>
 </div>
-<script src="app.js?v=40" charset="utf-8"></script>
+<script src="app.js?v=41" charset="utf-8"></script>
 </body></html>

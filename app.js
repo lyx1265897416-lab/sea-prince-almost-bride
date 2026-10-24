@@ -58,7 +58,15 @@ function tick(){
 const bgmA = new Audio(), bgmB = new Audio(); let bgmFront = bgmA, bgmCur = null, duck = false; const bgmPos = {};
 [bgmA, bgmB].forEach(a => { a.loop = true; a.volume = 0; a.preload = 'auto'; });
 const bgmUrl = k => media(`assets/bgm/${k}.mp3`);
-function setBgm(k){
+let bgmWant = null;
+const SILENT = 'data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YUAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+// 正在播的镜头和下一镜都已下载进内存，才去加载配乐，避免和视频抢带宽
+function videoHealthy(){
+  const s = st.shot, ids = s ? [s.id, ...nextIds(s)] : [EPS[st.ep] && EPS[st.ep].entry];
+  return ids.filter(id => shots && shots[id]).every(id => blobs.has(id) || failed.has(id));
+}
+function setBgm(k){ if (k) bgmWant = k; }
+function switchBgm(k){
   if (!k || k === bgmCur) return;
   if (bgmCur) bgmPos[bgmCur] = bgmFront.currentTime;
   const nxt = bgmFront === bgmA ? bgmB : bgmA, pos = bgmPos[k] || 0;
@@ -66,7 +74,7 @@ function setBgm(k){
   nxt.addEventListener('loadedmetadata', () => { try { nxt.currentTime = nxt.duration ? pos % nxt.duration : 0; } catch(e){} }, {once: true});
   bgmFront = nxt; bgmCur = k;
 }
-function unlockBgm(){ [bgmA, bgmB].forEach(a => { if (!a.getAttribute('src')) a.src = bgmUrl(bgmCur || 'open'); a.play().then(() => { if (a !== bgmFront) a.pause(); }).catch(() => {}); }); }  // 在点击里先播一次，手机上之后才能自动播放
+function unlockBgm(){ [bgmA, bgmB].forEach(a => { if (!a.getAttribute('src')) a.src = SILENT; a.play().then(() => { if (a.getAttribute('src') === SILENT) a.pause(); }).catch(() => {}); }); }  // 在点击里先播一次，手机上之后才能自动播放
 function bgmTarget(){
   const b = document.body.classList;
   if (document.hidden) return 0;
@@ -77,11 +85,12 @@ function bgmTarget(){
   return 0;
 }
 setInterval(() => {
+  if (bgmWant && bgmWant !== bgmCur && videoHealthy()) switchBgm(bgmWant);
   const tgt = bgmTarget();
   for (const a of [bgmA, bgmB]){
     const want = a === bgmFront ? tgt : 0, d = want - a.volume;
     a.volume = Math.abs(d) > .012 ? Math.max(0, Math.min(1, a.volume + Math.sign(d) * .012)) : want;
-    if (want > 0 && a.paused && a.getAttribute('src')) a.play().catch(() => {});
+    if (want > 0 && a.paused && a.getAttribute('src') && a.getAttribute('src') !== SILENT) a.play().catch(() => {});
     if (want === 0 && a.volume < .01 && !a.paused) a.pause();
   }
 }, 50);
@@ -98,7 +107,7 @@ const urlOf = k => k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
 function lookahead(root){
   const out = [root], seen = new Set([root]); let layer = [root];
-  for (let d = 0; d <= 3 && layer.length; d++){
+  for (let d = 0; d <= 7 && layer.length; d++){
     const nx = [];
     for (const id of layer){
       const s = shots[id]; if (!s) continue;
@@ -113,7 +122,7 @@ function warm(root){
   root = root || (st.shot && st.shot.id); if (!root) return;
   want = lookahead(root);
   const busy = new Set([front, back, idle].map(v => v.getAttribute('src')));
-  for (const [k, u] of [...blobs]) if (blobs.size > 16 && !want.includes(k) && !busy.has(u)){ URL.revokeObjectURL(u); blobs.delete(k); }
+  for (const [k, u] of [...blobs]) if (blobs.size > 30 && !want.includes(k) && !busy.has(u)){ URL.revokeObjectURL(u); blobs.delete(k); }
   pump();
 }
 function pump(){
@@ -137,7 +146,7 @@ const epIndex = id => Math.max(0, EPS.findIndex(e => e.id === id));
 const epLabel = i => T(`第 ${i + 1} 集 · ${EPS[i].zh}`, `Episode ${i + 1}`);
 function playShot(id, {offset = 0} = {}){
   const s = shots[id]; if (!s) return showEnd();
-  closeChoice(); hideCards(); hideIdle();
+  closeChoice(); hideCards(); hideIdle(); $('buffering').hidden = true;
   st.shot = s; st.doneId = null; st.ep = epIndex(s.episode); markReached(st.ep);
   setBgm(s.bgm);
   mode('playing'); lastKey = ''; if (performance.now() >= holdUntil) showSub(null);
@@ -168,6 +177,8 @@ function onEnd(){
 [va, vb].forEach(v => {
   v.addEventListener('ended', () => { if (v === front) onEnd(); });
   v.addEventListener('play', () => { if (v === front) syncIcon(); });
+  v.addEventListener('waiting', () => { if (v === front && document.body.classList.contains('playing')) $('buffering').hidden = false; });
+  v.addEventListener('playing', () => { if (v === front) $('buffering').hidden = true; });
   v.addEventListener('pause', () => { if (v === front && !v.ended) syncIcon(); });
 });
 function startIdle(s){ if (!s.idle_src) return; idle.src = srcFor(s.id, true); idle.currentTime = 0; idle.play().then(() => { if (st.shot === s && document.body.classList.contains('choosing')) idle.classList.add('on'); }).catch(() => {}); }
@@ -183,8 +194,15 @@ function epIntro(i, prev){
   $('epNum').textContent = `EPISODE ${i + 1}`; $('epT').textContent = EN ? E.en : `第 ${i + 1} 集 · ${E.zh}`; $('epTe').textContent = EN ? '' : E.en;
   $('epCard').hidden = false; warm(E.entry); save(E.entry, true);
   const go = () => { clearTimeout(epTimer); $('epCard').hidden = true; playShot(E.entry); };
-  // 自动继续：卡片停 3.5 秒后，等第一镜下载进内存再开播（最多再等 8 秒）；手动点「继续观看」立即开始
-  const t0 = performance.now(), auto = () => { if (blobs.has(E.entry) || failed.has(E.entry) || performance.now() - t0 > 11500) go(); else epTimer = setTimeout(auto, 300); };
+  // 自动继续：卡片停 3.5 秒后，等开头 3 镜都下载进内存再开播（最多再等 20 秒）；手动点「继续观看」立即开始
+  const first = []; for (let id = E.entry; id && shots[id] && first.length < 3; ){ first.push(id); const s = shots[id]; id = s.interaction ? null : s.next; }
+  const t0 = performance.now(), auto = () => {
+    const n = first.filter(id => blobs.has(id) || failed.has(id)).length;
+    if (n === first.length || performance.now() - t0 > 23500){ $('epBuf').textContent = ''; return go(); }
+    $('epBuf').textContent = T(`正在缓冲 ${n}/${first.length}`, `Buffering ${n}/${first.length}`);
+    epTimer = setTimeout(auto, 300);
+  };
+  $('epBuf').textContent = '';
   clearTimeout(epTimer); epTimer = setTimeout(auto, 3500);
   $('epGo').onclick = go;
 }
