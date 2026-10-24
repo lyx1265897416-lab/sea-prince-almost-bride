@@ -444,644 +444,6 @@
    "resolution": "480p native"
   },
   {
-   "id": "A1",
-   "episode": "01",
-   "src": "assets/video/A1.mp4",
-   "poster": "assets/posters/A1.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [],
-   "next": "A2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "A2",
-   "episode": "01",
-   "src": "assets/video/A2.mp4",
-   "poster": "assets/posters/A2.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [],
-   "next": "A3",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "A3",
-   "episode": "01",
-   "src": "assets/video/A3.mp4",
-   "poster": "assets/posters/A3.jpg",
-   "duration": 3.0,
-   "media_in": 0,
-   "media_out": 3.0,
-   "cues": [],
-   "next": "A4",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "A4",
-   "episode": "01",
-   "src": "assets/video/A4.mp4",
-   "poster": "assets/posters/A4.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [],
-   "next": "B1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "B1",
-   "episode": "01",
-   "src": "assets/video/B1.mp4",
-   "poster": "assets/posters/B1.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [],
-   "next": "B2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "B2",
-   "episode": "01",
-   "src": "assets/video/B2.mp4",
-   "poster": "assets/posters/B2.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [],
-   "next": "B3",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "B3",
-   "episode": "01",
-   "src": "assets/video/B3.mp4",
-   "poster": "assets/posters/B3.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [],
-   "next": "C1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "C1",
-   "episode": "01",
-   "src": "assets/video/C1.mp4",
-   "poster": "assets/posters/C1.jpg",
-   "duration": 3.1,
-   "media_in": 0,
-   "media_out": 3.1,
-   "cues": [
-    {
-     "start": 0,
-     "end": 1.17,
-     "speaker": "SKY",
-     "en": "My friend.",
-     "zh": "我朋友。"
-    },
-    {
-     "start": 1.62,
-     "end": 2.46,
-     "speaker": "SKY",
-     "en": "Yellow jacket.",
-     "zh": "穿黄外套的。"
-    },
-    {
-     "start": 2.48,
-     "end": 2.93,
-     "speaker": "SKY",
-     "en": "Where is she?",
-     "zh": "她在哪？"
-    }
-   ],
-   "next": "C2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "C2",
-   "episode": "01",
-   "src": "assets/video/C2.mp4",
-   "poster": "assets/posters/C2.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 0,
-     "end": 1.99,
-     "speaker": "VES",
-     "en": "She is safe.",
-     "zh": "她很安全。"
-    },
-    {
-     "start": 2.64,
-     "end": 4.61,
-     "speaker": "VES",
-     "en": "Visitors cannot enter this wing.",
-     "zh": "访客不得进入这一区。"
-    }
-   ],
-   "next": "C3",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "C3",
-   "episode": "01",
-   "src": "assets/video/C3.mp4",
-   "poster": "assets/posters/C3.jpg",
-   "duration": 6.04,
-   "media_in": 0,
-   "media_out": 6.04,
-   "cues": [
-    {
-     "start": 0.15,
-     "end": 1.26,
-     "speaker": "SKY",
-     "en": "Then let me see her.",
-     "zh": "那就让我见她。"
-    },
-    {
-     "start": 1.72,
-     "end": 3.33,
-     "speaker": "VES",
-     "en": "Unregistered visitors are held.",
-     "zh": "未登记的访客会被扣留。"
-    },
-    {
-     "start": 3.5,
-     "end": 5.79,
-     "speaker": "VES",
-     "en": "And their memory of this place is sealed.",
-     "zh": "他们关于这里的记忆，也会被封存。"
-    }
-   ],
-   "next": "D1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "D1",
-   "episode": "01",
-   "src": "assets/video/D1.mp4",
-   "poster": "assets/posters/D1.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [],
-   "next": "D2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "D2",
-   "episode": "01",
-   "src": "assets/video/D2.mp4",
-   "poster": "assets/posters/D2.jpg",
-   "duration": 3.0,
-   "media_in": 0,
-   "media_out": 3.0,
-   "cues": [],
-   "next": "D3",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "D3",
-   "episode": "01",
-   "src": "assets/video/D3.mp4",
-   "poster": "assets/posters/D3.jpg",
-   "duration": 6.04,
-   "media_in": 0,
-   "media_out": 6.04,
-   "cues": [
-    {
-     "start": 1.36,
-     "end": 2.69,
-     "speaker": "RIA",
-     "en": "She is with me.",
-     "zh": "她是跟我来的。"
-    },
-    {
-     "start": 2.78,
-     "end": 5.83,
-     "speaker": "RIA",
-     "en": "My future bride.",
-     "zh": "我未来的新娘。"
-    }
-   ],
-   "next": null,
-   "interaction": {
-    "type": "choice",
-    "key": "claim",
-    "en": "Your answer?",
-    "zh": "你怎么回应？",
-    "presentation": "dialogue",
-    "options": [
-     {
-      "en": "Play along—for now",
-      "zh": "先配合，找朋友要紧",
-      "target": "EA",
-      "value": "play"
-     },
-     {
-      "en": "Call his bluff",
-      "zh": "当场反问",
-      "target": "EB",
-      "value": "challenge"
-     }
-    ]
-   },
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native",
-   "idle_src": "assets/video/D3-IDLE.mp4"
-  },
-  {
-   "id": "EA",
-   "episode": "01",
-   "src": "assets/video/EA.mp4",
-   "poster": "assets/posters/EA.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 0.2,
-     "end": 1.75,
-     "speaker": "SKY",
-     "en": "You can explain that later.",
-     "zh": "这个你晚点再解释。"
-    },
-    {
-     "start": 2.1,
-     "end": 3.07,
-     "speaker": "SKY",
-     "en": "My friend comes first.",
-     "zh": "先找我朋友。"
-    }
-   ],
-   "next": "F1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "EB",
-   "episode": "01",
-   "src": "assets/video/EB.mp4",
-   "poster": "assets/posters/EB.jpg",
-   "duration": 6.04,
-   "media_in": 0,
-   "media_out": 6.04,
-   "cues": [
-    {
-     "start": 0.1,
-     "end": 1.69,
-     "speaker": "SKY",
-     "en": "Your bride?",
-     "zh": "你的新娘？"
-    },
-    {
-     "start": 3.48,
-     "end": 4.35,
-     "speaker": "RIA",
-     "en": "Play along.",
-     "zh": "配合我。"
-    },
-    {
-     "start": 4.82,
-     "end": 6.01,
-     "speaker": "RIA",
-     "en": "I'll take you to her.",
-     "zh": "我带你去找她。"
-    }
-   ],
-   "next": "F1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "F1",
-   "episode": "01",
-   "src": "assets/video/F1.mp4",
-   "poster": "assets/posters/F1.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 2.88,
-     "end": 4.85,
-     "speaker": "VES",
-     "en": "Then you answer for both of them, Rian.",
-     "zh": "那她们两个，由你负责，雷恩。"
-    }
-   ],
-   "next": "F2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "F2",
-   "episode": "01",
-   "src": "assets/video/F2.mp4",
-   "poster": "assets/posters/F2.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [
-    {
-     "start": 0,
-     "end": 1.53,
-     "speaker": "RIA",
-     "en": "I always do.",
-     "zh": "我一向如此。"
-    },
-    {
-     "start": 1.92,
-     "end": 2.89,
-     "speaker": "RIA",
-     "en": "This way.",
-     "zh": "这边走。"
-    }
-   ],
-   "next": "G1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "G1",
-   "episode": "01",
-   "src": "assets/video/G1.mp4",
-   "poster": "assets/posters/G1.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 1.68,
-     "end": 3.59,
-     "speaker": "RIA",
-     "en": "You swim like you're angry at the ocean.",
-     "zh": "你游泳的样子，像在跟大海生气。"
-    },
-    {
-     "start": 3.6,
-     "end": 4.15,
-     "speaker": "SKY",
-     "en": "I was.",
-     "zh": "我确实在生气。"
-    }
-   ],
-   "next": "G2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "G2",
-   "episode": "01",
-   "src": "assets/video/G2.mp4",
-   "poster": "assets/posters/G2.jpg",
-   "duration": 3.2,
-   "media_in": 0,
-   "media_out": 3.2,
-   "cues": [],
-   "next": "H1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "H1",
-   "episode": "01",
-   "src": "assets/video/H1.mp4",
-   "poster": "assets/posters/H1.jpg",
-   "duration": 4.04,
-   "media_in": 0,
-   "media_out": 4.04,
-   "cues": [
-    {
-     "start": 1.72,
-     "end": 3.87,
-     "speaker": "SKY",
-     "en": "Mila!",
-     "zh": "米粒！"
-    }
-   ],
-   "next": "H2",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "H2",
-   "episode": "01",
-   "src": "assets/video/H2.mp4",
-   "poster": "assets/posters/H2.jpg",
-   "duration": 6.04,
-   "media_in": 0,
-   "media_out": 6.04,
-   "cues": [],
-   "next": "H4",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "H4",
-   "episode": "01",
-   "src": "assets/video/H4.mp4",
-   "poster": "assets/posters/H4.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 0.4,
-     "end": 1.55,
-     "speaker": "SKY",
-     "en": "Are you okay?",
-     "zh": "你没事吧？"
-    },
-    {
-     "start": 1.88,
-     "end": 3.07,
-     "speaker": "SKY",
-     "en": "Your signal disappeared.",
-     "zh": "你的定位突然没了。"
-    }
-   ],
-   "next": "H5",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "H5",
-   "episode": "01",
-   "src": "assets/video/H5.mp4",
-   "poster": "assets/posters/H5.jpg",
-   "duration": 6.04,
-   "media_in": 0,
-   "media_out": 6.04,
-   "cues": [
-    {
-     "start": 1.08,
-     "end": 2.21,
-     "speaker": "MIL",
-     "en": "Just my pride.",
-     "zh": "只是面子受伤了。"
-    },
-    {
-     "start": 2.36,
-     "end": 4.05,
-     "speaker": "MIL",
-     "en": "The current pulled me through the reef.",
-     "zh": "暗流把我卷过了礁石。"
-    },
-    {
-     "start": 4.08,
-     "end": 5.99,
-     "speaker": "MIL",
-     "en": "They took my camera, not my head.",
-     "zh": "他们收走的是我的相机，不是我的脑袋。"
-    }
-   ],
-   "next": "H6",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "H6",
-   "episode": "01",
-   "src": "assets/video/H6.mp4",
-   "poster": "assets/posters/H6.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 2.16,
-     "end": 3.81,
-     "speaker": "MIL",
-     "en": "I sent one location pin.",
-     "zh": "我就发了个定位。"
-    },
-    {
-     "start": 3.94,
-     "end": 4.93,
-     "speaker": "MIL",
-     "en": "You brought a prince?",
-     "zh": "你给我带回来一个王子？"
-    }
-   ],
-   "next": "H7",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
-   "id": "H7",
-   "episode": "01",
-   "src": "assets/video/H7.mp4",
-   "poster": "assets/posters/H7.jpg",
-   "duration": 5.04,
-   "media_in": 0,
-   "media_out": 5.04,
-   "cues": [
-    {
-     "start": 1.78,
-     "end": 4.61,
-     "speaker": "RIA",
-     "en": "Technically... she's engaged to one.",
-     "zh": "严格来说……她和一位王子订婚了。"
-    }
-   ],
-   "next": "K1",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native"
-  },
-  {
    "id": "K1",
    "episode": "02",
    "src": "assets/video/K1.mp4",
@@ -2383,6 +1745,644 @@
     }
    ],
    "next": null,
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "A1",
+   "episode": "01",
+   "src": "assets/video/A1.mp4",
+   "poster": "assets/posters/A1.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [],
+   "next": "A2",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "A2",
+   "episode": "01",
+   "src": "assets/video/A2.mp4",
+   "poster": "assets/posters/A2.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [],
+   "next": "A3",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "A3",
+   "episode": "01",
+   "src": "assets/video/A3.mp4",
+   "poster": "assets/posters/A3.jpg",
+   "duration": 3.0,
+   "media_in": 0,
+   "media_out": 3.0,
+   "cues": [],
+   "next": "A4",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "A4",
+   "episode": "01",
+   "src": "assets/video/A4.mp4",
+   "poster": "assets/posters/A4.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [],
+   "next": "B1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "B1",
+   "episode": "01",
+   "src": "assets/video/B1.mp4",
+   "poster": "assets/posters/B1.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [],
+   "next": "B3",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "B3",
+   "episode": "01",
+   "src": "assets/video/B3.mp4",
+   "poster": "assets/posters/B3.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [],
+   "next": "C1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "C1",
+   "episode": "01",
+   "src": "assets/video/C1.mp4",
+   "poster": "assets/posters/C1.jpg",
+   "duration": 3.1,
+   "media_in": 0,
+   "media_out": 3.1,
+   "cues": [
+    {
+     "start": 0,
+     "end": 1.17,
+     "speaker": "SKY",
+     "en": "My friend.",
+     "zh": "我朋友。"
+    },
+    {
+     "start": 1.62,
+     "end": 2.46,
+     "speaker": "SKY",
+     "en": "Yellow jacket.",
+     "zh": "穿黄外套的。"
+    },
+    {
+     "start": 2.48,
+     "end": 2.93,
+     "speaker": "SKY",
+     "en": "Where is she?",
+     "zh": "她在哪？"
+    }
+   ],
+   "next": "C2",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "C2",
+   "episode": "01",
+   "src": "assets/video/C2.mp4",
+   "poster": "assets/posters/C2.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 0,
+     "end": 1.99,
+     "speaker": "VES",
+     "en": "She is safe.",
+     "zh": "她很安全。"
+    },
+    {
+     "start": 2.64,
+     "end": 4.61,
+     "speaker": "VES",
+     "en": "Visitors cannot enter this wing.",
+     "zh": "访客不得进入这一区。"
+    }
+   ],
+   "next": "C3",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "C3",
+   "episode": "01",
+   "src": "assets/video/C3.mp4",
+   "poster": "assets/posters/C3.jpg",
+   "duration": 6.04,
+   "media_in": 0,
+   "media_out": 6.04,
+   "cues": [
+    {
+     "start": 0.15,
+     "end": 1.26,
+     "speaker": "SKY",
+     "en": "Then let me see her.",
+     "zh": "那就让我见她。"
+    },
+    {
+     "start": 1.72,
+     "end": 3.33,
+     "speaker": "VES",
+     "en": "Unregistered visitors are held.",
+     "zh": "未登记的访客会被扣留。"
+    },
+    {
+     "start": 3.5,
+     "end": 5.79,
+     "speaker": "VES",
+     "en": "And their memory of this place is sealed.",
+     "zh": "他们关于这里的记忆，也会被封存。"
+    }
+   ],
+   "next": "D1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "D1",
+   "episode": "01",
+   "src": "assets/video/D1.mp4",
+   "poster": "assets/posters/D1.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [],
+   "next": "D2",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "D2",
+   "episode": "01",
+   "src": "assets/video/D2.mp4",
+   "poster": "assets/posters/D2.jpg",
+   "duration": 3.0,
+   "media_in": 0,
+   "media_out": 3.0,
+   "cues": [],
+   "next": "D3",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "D3",
+   "episode": "01",
+   "src": "assets/video/D3.mp4",
+   "poster": "assets/posters/D3.jpg",
+   "duration": 6.04,
+   "media_in": 0,
+   "media_out": 6.04,
+   "cues": [
+    {
+     "start": 1.36,
+     "end": 2.69,
+     "speaker": "RIA",
+     "en": "She is with me.",
+     "zh": "她是跟我来的。"
+    },
+    {
+     "start": 2.78,
+     "end": 5.83,
+     "speaker": "RIA",
+     "en": "My future bride.",
+     "zh": "我未来的新娘。"
+    }
+   ],
+   "next": null,
+   "interaction": {
+    "type": "choice",
+    "key": "claim",
+    "en": "Your answer?",
+    "zh": "你怎么回应？",
+    "presentation": "dialogue",
+    "options": [
+     {
+      "en": "Play along—for now",
+      "zh": "先配合，找朋友要紧",
+      "target": "EA",
+      "value": "play"
+     },
+     {
+      "en": "Call his bluff",
+      "zh": "当场反问",
+      "target": "EB",
+      "value": "challenge"
+     }
+    ]
+   },
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native",
+   "idle_src": "assets/video/D3-IDLE.mp4"
+  },
+  {
+   "id": "EA",
+   "episode": "01",
+   "src": "assets/video/EA.mp4",
+   "poster": "assets/posters/EA.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 0.2,
+     "end": 1.75,
+     "speaker": "SKY",
+     "en": "You can explain that later.",
+     "zh": "这个你晚点再解释。"
+    },
+    {
+     "start": 2.1,
+     "end": 3.07,
+     "speaker": "SKY",
+     "en": "My friend comes first.",
+     "zh": "先找我朋友。"
+    }
+   ],
+   "next": "F1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "EB",
+   "episode": "01",
+   "src": "assets/video/EB.mp4",
+   "poster": "assets/posters/EB.jpg",
+   "duration": 6.04,
+   "media_in": 0,
+   "media_out": 6.04,
+   "cues": [
+    {
+     "start": 0.1,
+     "end": 1.69,
+     "speaker": "SKY",
+     "en": "Your bride?",
+     "zh": "你的新娘？"
+    },
+    {
+     "start": 3.48,
+     "end": 4.35,
+     "speaker": "RIA",
+     "en": "Play along.",
+     "zh": "配合我。"
+    },
+    {
+     "start": 4.82,
+     "end": 6.01,
+     "speaker": "RIA",
+     "en": "I'll take you to her.",
+     "zh": "我带你去找她。"
+    }
+   ],
+   "next": "F1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "F1",
+   "episode": "01",
+   "src": "assets/video/F1.mp4",
+   "poster": "assets/posters/F1.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 2.88,
+     "end": 4.85,
+     "speaker": "VES",
+     "en": "Then you answer for both of them, Rian.",
+     "zh": "那她们两个，由你负责，雷恩。"
+    }
+   ],
+   "next": "F2",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "F2",
+   "episode": "01",
+   "src": "assets/video/F2.mp4",
+   "poster": "assets/posters/F2.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [
+    {
+     "start": 1.0,
+     "end": 2.27,
+     "speaker": "RIA",
+     "en": "I always do.",
+     "zh": "我一向如此。"
+    },
+    {
+     "start": 2.92,
+     "end": 3.81,
+     "speaker": "RIA",
+     "en": "This way.",
+     "zh": "这边走。"
+    }
+   ],
+   "next": "G1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "G1",
+   "episode": "01",
+   "src": "assets/video/G1.mp4",
+   "poster": "assets/posters/G1.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 0.62,
+     "end": 2.65,
+     "speaker": "RIA",
+     "en": "You swim like you're angry at the ocean.",
+     "zh": "你游泳的样子，像在跟大海生气。"
+    },
+    {
+     "start": 3.6,
+     "end": 4.15,
+     "speaker": "SKY",
+     "en": "I was.",
+     "zh": "我确实在生气。"
+    }
+   ],
+   "next": "G2",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "G2",
+   "episode": "01",
+   "src": "assets/video/G2.mp4",
+   "poster": "assets/posters/G2.jpg",
+   "duration": 3.2,
+   "media_in": 0,
+   "media_out": 3.2,
+   "cues": [],
+   "next": "H1",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H1",
+   "episode": "01",
+   "src": "assets/video/H1.mp4",
+   "poster": "assets/posters/H1.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [
+    {
+     "start": 1.72,
+     "end": 3.87,
+     "speaker": "SKY",
+     "en": "Mila!",
+     "zh": "米粒！"
+    }
+   ],
+   "next": "H2",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H2",
+   "episode": "01",
+   "src": "assets/video/H2.mp4",
+   "poster": "assets/posters/H2.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [],
+   "next": "H3",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H3",
+   "episode": "01",
+   "src": "assets/video/H3.mp4",
+   "poster": "assets/posters/H3.jpg",
+   "duration": 4.04,
+   "media_in": 0,
+   "media_out": 4.04,
+   "cues": [],
+   "next": "H4",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H4",
+   "episode": "01",
+   "src": "assets/video/H4.mp4",
+   "poster": "assets/posters/H4.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 0.4,
+     "end": 1.55,
+     "speaker": "SKY",
+     "en": "Are you okay?",
+     "zh": "你没事吧？"
+    },
+    {
+     "start": 1.88,
+     "end": 3.07,
+     "speaker": "SKY",
+     "en": "Your signal disappeared.",
+     "zh": "你的定位突然没了。"
+    }
+   ],
+   "next": "H5",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H5",
+   "episode": "01",
+   "src": "assets/video/H5.mp4",
+   "poster": "assets/posters/H5.jpg",
+   "duration": 6.04,
+   "media_in": 0,
+   "media_out": 6.04,
+   "cues": [
+    {
+     "start": 0.7,
+     "end": 1.83,
+     "speaker": "MIL",
+     "en": "Just my pride.",
+     "zh": "只是面子受伤了。"
+    },
+    {
+     "start": 1.98,
+     "end": 3.75,
+     "speaker": "MIL",
+     "en": "The current pulled me through the reef.",
+     "zh": "暗流把我卷过了礁石。"
+    },
+    {
+     "start": 3.78,
+     "end": 5.87,
+     "speaker": "MIL",
+     "en": "They took my camera, not my head.",
+     "zh": "他们收走的是我的相机，不是我的脑袋。"
+    }
+   ],
+   "next": "H6",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H6",
+   "episode": "01",
+   "src": "assets/video/H6.mp4",
+   "poster": "assets/posters/H6.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 1.7,
+     "end": 3.41,
+     "speaker": "MIL",
+     "en": "I sent one location pin.",
+     "zh": "我就发了个定位。"
+    },
+    {
+     "start": 3.52,
+     "end": 4.53,
+     "speaker": "MIL",
+     "en": "You brought a prince?",
+     "zh": "你给我带回来一个王子？"
+    }
+   ],
+   "next": "H7",
+   "interaction": null,
+   "ambient_only": false,
+   "ambient_bed": false,
+   "model": "bytedance/seedance-2.5",
+   "resolution": "480p native"
+  },
+  {
+   "id": "H7",
+   "episode": "01",
+   "src": "assets/video/H7.mp4",
+   "poster": "assets/posters/H7.jpg",
+   "duration": 5.04,
+   "media_in": 0,
+   "media_out": 5.04,
+   "cues": [
+    {
+     "start": 2.92,
+     "end": 5.01,
+     "speaker": "RIA",
+     "en": "Technically... she's engaged to one.",
+     "zh": "严格来说……她和一位王子订婚了。"
+    }
+   ],
+   "next": "K1",
    "interaction": null,
    "ambient_only": false,
    "ambient_bed": false,
