@@ -38,13 +38,53 @@ function showSub(c){
   const who = her ? T('你', 'You') : NAMES[c.speaker] || '';
   subs.innerHTML = (who ? `<div class="who">${esc(who)}</div>` : '') + (c.zh && !EN ? `<div class="zh">${esc(c.zh)}</div>` : '') + (c.en ? `<div class="en">${esc(c.en)}</div>` : '');
 }
+// 地点 / 时间字卡（cue.speaker === 'CARD'）显示在画面正中
+const card = $('card'); let cardKey = '';
+function showCard(c){ const k = c ? c.start + c.en : ''; if (k === cardKey) return; cardKey = k; card.hidden = !c; card.innerHTML = c ? (c.zh && !EN && !subEn ? `<div class="zh">${esc(c.zh)}</div>` : '') + `<div class="en">${esc(c.en)}</div>` : ''; }
 function tick(){
   const s = st.shot;
-  if (!s || !document.body.classList.contains('playing') || performance.now() < holdUntil) return;
-  const t = front.currentTime - (s.media_in || 0), c = (s.cues || []).find(q => t >= q.start && t < q.end);
+  if (!s || !document.body.classList.contains('playing')){ showCard(null); duck = false; return; }
+  const t = front.currentTime - (s.media_in || 0), live = (s.cues || []).filter(q => t >= q.start && t < q.end);
+  showCard(live.find(q => q.speaker === 'CARD') || null);
+  const c = live.find(q => q.speaker !== 'CARD');
+  duck = !!c;
+  if (performance.now() < holdUntil) return;
   const key = s.id + '|' + (c ? c.start : '');
   if (key !== lastKey){ lastKey = key; showSub(c); }
 }
+
+// 配乐：两个播放器交替，按镜头的 bgm 字段换曲时交叉淡入淡出，只在需要时才加载下一首；记住每首播到的位置。
+// 有台词时压低，暂停、切到后台时淡出。
+const bgmA = new Audio(), bgmB = new Audio(); let bgmFront = bgmA, bgmCur = null, duck = false; const bgmPos = {};
+[bgmA, bgmB].forEach(a => { a.loop = true; a.volume = 0; a.preload = 'auto'; });
+const bgmUrl = k => media(`assets/bgm/${k}.mp3`);
+function setBgm(k){
+  if (!k || k === bgmCur) return;
+  if (bgmCur) bgmPos[bgmCur] = bgmFront.currentTime;
+  const nxt = bgmFront === bgmA ? bgmB : bgmA, pos = bgmPos[k] || 0;
+  nxt.src = bgmUrl(k);
+  nxt.addEventListener('loadedmetadata', () => { try { nxt.currentTime = nxt.duration ? pos % nxt.duration : 0; } catch(e){} }, {once: true});
+  bgmFront = nxt; bgmCur = k;
+}
+function unlockBgm(){ [bgmA, bgmB].forEach(a => { if (!a.getAttribute('src')) a.src = bgmUrl(bgmCur || 'open'); a.play().then(() => { if (a !== bgmFront) a.pause(); }).catch(() => {}); }); }  // 在点击里先播一次，手机上之后才能自动播放
+function bgmTarget(){
+  const b = document.body.classList;
+  if (document.hidden) return 0;
+  if (b.contains('playing')) return front.paused ? 0 : duck ? .12 : .3;
+  if (b.contains('choosing')) return .2;
+  if (b.contains('carding')) return .26;
+  if (b.contains('ended')) return .22;
+  return 0;
+}
+setInterval(() => {
+  const tgt = bgmTarget();
+  for (const a of [bgmA, bgmB]){
+    const want = a === bgmFront ? tgt : 0, d = want - a.volume;
+    a.volume = Math.abs(d) > .012 ? Math.max(0, Math.min(1, a.volume + Math.sign(d) * .012)) : want;
+    if (want > 0 && a.paused && a.getAttribute('src')) a.play().catch(() => {});
+    if (want === 0 && a.volume < .01 && !a.paused) a.pause();
+  }
+}, 50);
 
 // playback
 function syncIcon(){ $('playIco').innerHTML = front.paused ? '<path d="M8 5.5v13l10.5-6.5z"/>' : '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/>'; if (!front.paused) $('paused').hidden = true; }
@@ -99,6 +139,7 @@ function playShot(id, {offset = 0} = {}){
   const s = shots[id]; if (!s) return showEnd();
   closeChoice(); hideCards(); hideIdle();
   st.shot = s; st.doneId = null; st.ep = epIndex(s.episode); markReached(st.ep);
+  setBgm(s.bgm);
   mode('playing'); lastKey = ''; if (performance.now() >= holdUntil) showSub(null);
   $('epName').textContent = epLabel(st.ep); $('chap').textContent = `EP${st.ep + 1}`;
   if (!front.classList.contains('on') && s.poster) $('stage').style.backgroundImage = `url(${s.poster})`;  // 视频还没出来时先显示本镜首帧
@@ -137,6 +178,7 @@ let epTimer;
 function epIntro(i, prev){
   const E = EPS[i]; mode('carding'); hideIdle(); showSub(null); front.pause(); closeChoice();
   st.ep = i; markReached(i); $('epName').textContent = epLabel(i);
+  setBgm(shots[E.entry] && shots[E.entry].bgm);
   $('epDone').textContent = prev != null && prev < i ? T(`第 ${prev + 1} 集 · 完`, `End of Episode ${prev + 1}`) : '';
   $('epNum').textContent = `EPISODE ${i + 1}`; $('epT').textContent = EN ? E.en : `第 ${i + 1} 集 · ${E.zh}`; $('epTe').textContent = EN ? '' : E.en;
   $('epCard').hidden = false; warm(E.entry); save(E.entry, true);
@@ -241,8 +283,8 @@ function resume(){
 }
 
 // start
-$('startBtn').onclick = () => startEp(0);
-$('resumeBtn').onclick = resume;
+$('startBtn').onclick = () => { setBgm('open'); unlockBgm(); startEp(0); };
+$('resumeBtn').onclick = () => { unlockBgm(); resume(); };
 
 // controls
 function togglePause(){ if (!document.body.classList.contains('playing')) return; if (front.paused){ front.play().catch(() => {}); $('paused').hidden = true; } else { front.pause(); $('paused').hidden = false; } }
@@ -329,6 +371,6 @@ fetch('data.json').then(r => { if (!r.ok) throw Error('data'); return r.json(); 
 window.SeaPrince = {
   // fn(text, ctx) => Promise<{reply?:{en,zh,speaker?,audio?,sys?}, pick?:index, choose?:index}>
   setResponder(fn){ responder = typeof fn === 'function' ? fn : localResponder; },
-  state: () => ({shot: st.shot && st.shot.id, episode: EPS[st.ep] && EPS[st.ep].id, mode: (document.body.className.match(/\b(start|choosing|playing|carding|ended)\b/) || [])[1], answers: {...st.answers}, path: st.path.slice(), rate, subEn}),
+  state: () => ({shot: st.shot && st.shot.id, episode: EPS[st.ep] && EPS[st.ep].id, mode: (document.body.className.match(/\b(start|choosing|playing|carding|ended)\b/) || [])[1], answers: {...st.answers}, path: st.path.slice(), rate, subEn, bgm: bgmCur, bgmVolume: +bgmFront.volume.toFixed(2), bgmPlaying: !bgmFront.paused}),
 };
 })();
