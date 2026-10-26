@@ -78,7 +78,7 @@ function unlockBgm(){ [bgmA, bgmB].forEach(a => { if (!a.getAttribute('src')) a.
 function bgmTarget(){
   const b = document.body.classList;
   if (document.hidden) return 0;
-  if (b.contains('playing')) return front.paused ? 0 : duck ? .12 : .3;
+  if (b.contains('playing')) return !$('buffering').hidden ? .26 : front.paused ? 0 : duck ? .12 : .3;
   if (b.contains('choosing')) return .2;
   if (b.contains('carding')) return .26;
   if (b.contains('ended')) return .22;
@@ -103,7 +103,10 @@ function swap(){ const f = front; front = back; back = f; front.classList.add('o
 const blobs = new Map(), loading = new Map(), failed = new Set(); let want = [];
 const cancel = k => { const c = loading.get(k); if (c){ c.abort(); loading.delete(k); } };
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
-const urlOf = k => k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src;
+// 自适应码率：按实测下载速度在两套视频之间切换（清晰版约 0.48Mbps，轻量版约 0.3Mbps）
+let bw = 0, lite = false;  // bw：下载速度 KB/s（滑动平均）
+const variant = u => lite ? u.replace('assets/video/', 'assets/video-lite/') : u;
+const urlOf = k => variant(k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src);
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
 function lookahead(root){
   const out = [root], seen = new Set([root]); let layer = [root];
@@ -136,15 +139,30 @@ function pump(){
   if (loading.size) return;
   const k = want.find(k => !blobs.has(k) && !failed.has(k)); if (!k) return;
   const ctl = new AbortController(); loading.set(k, ctl);
+  const t0 = performance.now();
   fetch(urlOf(k), {signal: ctl.signal}).then(r => { if (!r.ok) throw Error(r.status); return r.blob(); })
-    .then(b => blobs.set(k, URL.createObjectURL(b))).catch(e => { if (e.name !== 'AbortError') failed.add(k); })
+    .then(b => {
+      blobs.set(k, URL.createObjectURL(b));
+      const kbs = b.size / 1024 / Math.max(.05, (performance.now() - t0) / 1000);
+      if (b.size > 100000) bw = bw ? bw * .6 + kbs * .4 : kbs;
+      if (!lite && bw && bw < 90) lite = true; else if (lite && bw > 170) lite = false;  // 清晰版约 60KB/s，留 1.5 倍余量
+    }).catch(e => { if (e.name !== 'AbortError') failed.add(k); })
     .finally(() => { if (loading.get(k) === ctl) loading.delete(k); pump(); });
 }
 setInterval(pump, 400);
 const nextIds = s => { const x = s.interaction; return x ? (x.type === 'qte' ? [x.target, x.miss] : x.options.map(o => o.target)) : [s.next]; };
 const epIndex = id => Math.max(0, EPS.findIndex(e => e.id === id));
 const epLabel = i => T(`第 ${i + 1} 集 · ${EPS[i].zh}`, `Episode ${i + 1}`);
-function playShot(id, {offset = 0} = {}){
+// 下一镜还没下完：停在当前画面转圈，等它完整下完再播（最多 20 秒），避免在镜头中间一卡一卡
+let waitTok = 0;
+function playShot(id, opts = {}){
+  const tok = ++waitTok, t0 = performance.now();
+  const ready = () => blobs.has(id) || failed.has(id) || !(loading.has(id) || want.includes(id)) || performance.now() - t0 > 20000;
+  if (ready()) return startShot(id, opts);
+  $('buffering').hidden = false;
+  (function poll(){ if (tok !== waitTok) return; if (ready()){ $('buffering').hidden = true; startShot(id, opts); } else setTimeout(poll, 150); })();
+}
+function startShot(id, {offset = 0} = {}){
   const s = shots[id]; if (!s) return showEnd();
   closeChoice(); hideCards(); hideIdle(); $('buffering').hidden = true;
   st.shot = s; st.doneId = null; st.ep = epIndex(s.episode); markReached(st.ep);
@@ -389,6 +407,6 @@ fetch('data.json').then(r => { if (!r.ok) throw Error('data'); return r.json(); 
 window.SeaPrince = {
   // fn(text, ctx) => Promise<{reply?:{en,zh,speaker?,audio?,sys?}, pick?:index, choose?:index}>
   setResponder(fn){ responder = typeof fn === 'function' ? fn : localResponder; },
-  state: () => ({shot: st.shot && st.shot.id, episode: EPS[st.ep] && EPS[st.ep].id, mode: (document.body.className.match(/\b(start|choosing|playing|carding|ended)\b/) || [])[1], answers: {...st.answers}, path: st.path.slice(), rate, subEn, bgm: bgmCur, bgmVolume: +bgmFront.volume.toFixed(2), bgmPlaying: !bgmFront.paused}),
+  state: () => ({shot: st.shot && st.shot.id, episode: EPS[st.ep] && EPS[st.ep].id, mode: (document.body.className.match(/\b(start|choosing|playing|carding|ended)\b/) || [])[1], answers: {...st.answers}, path: st.path.slice(), rate, subEn, bandwidthKBs: Math.round(bw), lite, bgm: bgmCur, bgmVolume: +bgmFront.volume.toFixed(2), bgmPlaying: !bgmFront.paused}),
 };
 })();
