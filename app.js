@@ -136,15 +136,21 @@ function pump(){
     if (!full && ahead < 2) [...loading.keys()].forEach(cancel);  // 正在播的镜头快断了：停掉所有预取
     if (!full && ahead < 4) return;
   }
-  if (loading.size) return;
-  const k = want.find(k => !blobs.has(k) && !failed.has(k)); if (!k) return;
+  // 每个请求要先等 1–2 秒才开始传（代理/跨境延迟），所以同时下 4 个，把等待时间叠起来
+  while (loading.size < 4){
+    const k = want.find(k => !blobs.has(k) && !failed.has(k) && !loading.has(k)); if (!k) return;
+    fetchOne(k);
+  }
+}
+function fetchOne(k){
   const ctl = new AbortController(); loading.set(k, ctl);
-  const t0 = performance.now();
-  fetch(urlOf(k), {signal: ctl.signal}).then(r => { if (!r.ok) throw Error(r.status); return r.blob(); })
+  let tHead = 0;
+  fetch(urlOf(k), {signal: ctl.signal}).then(r => { if (!r.ok) throw Error(r.status); tHead = performance.now(); return r.blob(); })
     .then(b => {
       blobs.set(k, URL.createObjectURL(b));
-      const kbs = b.size / 1024 / Math.max(.05, (performance.now() - t0) / 1000);
-      if (b.size > 100000) bw = bw ? bw * .6 + kbs * .4 : kbs;
+      // 测速只算真正传输的时间（不算首字节前的等待）；并行时乘上同时在下的个数，得到总带宽
+      const kbs = b.size / 1024 / Math.max(.05, (performance.now() - tHead) / 1000) * Math.max(1, loading.size);
+      if (b.size > 60000) bw = bw ? bw * .6 + kbs * .4 : kbs;
       // 需要的速度留 1.5 倍余量：高清约 320KB/s → 480 以上用高清；标准约 125KB/s → 190 以上用标准；更慢用轻量（带回差，避免来回跳）
       if (bw > (tier === 'video-hd' ? 400 : 480)) tier = 'video-hd';
       else if (bw > (tier === 'video-lite' ? 230 : 190)) tier = 'video';
