@@ -103,9 +103,9 @@ function swap(){ const f = front; front = back; back = f; front.classList.add('o
 const blobs = new Map(), loading = new Map(), failed = new Set(); let want = [];
 const cancel = k => { const c = loading.get(k); if (c){ c.abort(); loading.delete(k); } };
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
-// 自适应码率：按实测下载速度在两套视频之间切换（清晰版约 0.48Mbps，轻量版约 0.3Mbps）
-let bw = 0, lite = false;  // bw：下载速度 KB/s（滑动平均）
-const variant = u => lite ? u.replace('assets/video/', 'assets/video-lite/') : u;
+// 自适应三档：按实测下载速度选择 高清（原生 480p，接近原片，约 2.5Mbps）/ 标准（480p，约 1Mbps）/ 轻量（360p，约 0.3Mbps）
+let bw = 0, tier = 'video';  // bw：下载速度 KB/s（滑动平均）；首镜先用标准档，测到速度后再升降
+const variant = u => tier === 'video' ? u : u.replace('assets/video/', `assets/${tier}/`);
 const urlOf = k => variant(k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src);
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
 function lookahead(root){
@@ -145,7 +145,10 @@ function pump(){
       blobs.set(k, URL.createObjectURL(b));
       const kbs = b.size / 1024 / Math.max(.05, (performance.now() - t0) / 1000);
       if (b.size > 100000) bw = bw ? bw * .6 + kbs * .4 : kbs;
-      if (!lite && bw && bw < 90) lite = true; else if (lite && bw > 170) lite = false;  // 清晰版约 60KB/s，留 1.5 倍余量
+      // 需要的速度留 1.5 倍余量：高清约 320KB/s → 480 以上用高清；标准约 125KB/s → 190 以上用标准；更慢用轻量（带回差，避免来回跳）
+      if (bw > (tier === 'video-hd' ? 400 : 480)) tier = 'video-hd';
+      else if (bw > (tier === 'video-lite' ? 230 : 190)) tier = 'video';
+      else tier = 'video-lite';
     }).catch(e => { if (e.name !== 'AbortError') failed.add(k); })
     .finally(() => { if (loading.get(k) === ctl) loading.delete(k); pump(); });
 }
@@ -407,6 +410,6 @@ fetch('data.json').then(r => { if (!r.ok) throw Error('data'); return r.json(); 
 window.SeaPrince = {
   // fn(text, ctx) => Promise<{reply?:{en,zh,speaker?,audio?,sys?}, pick?:index, choose?:index}>
   setResponder(fn){ responder = typeof fn === 'function' ? fn : localResponder; },
-  state: () => ({shot: st.shot && st.shot.id, episode: EPS[st.ep] && EPS[st.ep].id, mode: (document.body.className.match(/\b(start|choosing|playing|carding|ended)\b/) || [])[1], answers: {...st.answers}, path: st.path.slice(), rate, subEn, bandwidthKBs: Math.round(bw), lite, bgm: bgmCur, bgmVolume: +bgmFront.volume.toFixed(2), bgmPlaying: !bgmFront.paused}),
+  state: () => ({shot: st.shot && st.shot.id, episode: EPS[st.ep] && EPS[st.ep].id, mode: (document.body.className.match(/\b(start|choosing|playing|carding|ended)\b/) || [])[1], answers: {...st.answers}, path: st.path.slice(), rate, subEn, bandwidthKBs: Math.round(bw), tier, bgm: bgmCur, bgmVolume: +bgmFront.volume.toFixed(2), bgmPlaying: !bgmFront.paused}),
 };
 })();

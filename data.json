@@ -182,9 +182,9 @@
    "episode": "01",
    "src": "assets/video/A2.mp4",
    "poster": "assets/posters/A2.jpg",
-   "duration": 4.04,
+   "duration": 3.13,
    "media_in": 0,
-   "media_out": 4.04,
+   "media_out": 3.13,
    "cues": [],
    "next": "A3",
    "interaction": null,
@@ -326,15 +326,15 @@
    "media_out": 5.04,
    "cues": [
     {
-     "start": 0,
-     "end": 1.99,
+     "start": 1.42,
+     "end": 2.67,
      "speaker": "VES",
      "en": "She is safe.",
      "zh": "她很安全。"
     },
     {
-     "start": 2.64,
-     "end": 4.61,
+     "start": 3.06,
+     "end": 4.81,
      "speaker": "VES",
      "en": "Visitors cannot enter this wing.",
      "zh": "访客不得进入这一区。"
@@ -365,15 +365,15 @@
      "zh": "那就让我见她。"
     },
     {
-     "start": 1.72,
-     "end": 3.33,
+     "start": 1.76,
+     "end": 3.41,
      "speaker": "VES",
      "en": "Unregistered visitors are held.",
      "zh": "未登记的访客会被扣留。"
     },
     {
-     "start": 3.5,
-     "end": 5.79,
+     "start": 3.48,
+     "end": 5.85,
      "speaker": "VES",
      "en": "And their memory of this place is sealed.",
      "zh": "他们关于这里的记忆，也会被封存。"
@@ -752,21 +752,21 @@
    "media_out": 6.04,
    "cues": [
     {
-     "start": 0.7,
-     "end": 1.83,
+     "start": 1.14,
+     "end": 2.17,
      "speaker": "MIL",
      "en": "Just my pride.",
      "zh": "只是面子受伤了。"
     },
     {
-     "start": 1.98,
-     "end": 3.75,
+     "start": 2.56,
+     "end": 3.91,
      "speaker": "MIL",
      "en": "The current pulled me through the reef.",
      "zh": "暗流把我卷过了礁石。"
     },
     {
-     "start": 3.78,
+     "start": 3.96,
      "end": 5.87,
      "speaker": "MIL",
      "en": "They took my camera, not my head.",
@@ -791,15 +791,15 @@
    "media_out": 5.04,
    "cues": [
     {
-     "start": 1.7,
-     "end": 3.41,
+     "start": 1.82,
+     "end": 3.69,
      "speaker": "MIL",
      "en": "I sent one location pin.",
      "zh": "我就发了个定位。"
     },
     {
-     "start": 3.52,
-     "end": 4.53,
+     "start": 3.8,
+     "end": 4.83,
      "speaker": "MIL",
      "en": "You brought a prince?",
      "zh": "你给我带回来一个王子？"
@@ -993,14 +993,14 @@
    "cues": [
     {
      "start": 0,
-     "end": 2.39,
+     "end": 2.57,
      "speaker": "RIA",
      "en": "I could have signed an ordinary guarantee.",
      "zh": "我本可以签一份普通担保。"
     },
     {
-     "start": 3.3,
-     "end": 6.37,
+     "start": 3.7,
+     "end": 6.83,
      "speaker": "RIA",
      "en": "I chose the lie because I wanted out of an arranged marriage.",
      "zh": "我选择撒谎，是因为我想摆脱一场安排好的婚事。"
@@ -1039,21 +1039,21 @@
     },
     {
      "start": 4.18,
-     "end": 4.48,
+     "end": 5.06,
      "speaker": "SKY",
      "en": "Those are not the same problem.",
      "zh": "这不是同一个问题。"
     },
     {
-     "start": 4.48,
-     "end": 5.57,
+     "start": 5.08,
+     "end": 6.31,
      "speaker": "RIA",
      "en": "No.",
      "zh": "对。"
     },
     {
-     "start": 6.04,
-     "end": 6.93,
+     "start": 6.88,
+     "end": 7.81,
      "speaker": "RIA",
      "en": "They're not.",
      "zh": "不是。"
@@ -1201,29 +1201,29 @@
    "media_out": 7.04,
    "cues": [
     {
-     "start": 1.2,
-     "end": 1.76,
+     "start": 0.94,
+     "end": 1.44,
      "speaker": "RIA",
      "en": "Agreed.",
      "zh": "成交。"
     },
     {
-     "start": 1.78,
-     "end": 3.63,
+     "start": 1.46,
+     "end": 3.43,
      "speaker": "RIA",
      "en": "Three nights, no vows.",
      "zh": "三夜，不立誓。"
     },
     {
-     "start": 3.84,
-     "end": 5.79,
+     "start": 4.0,
+     "end": 5.85,
      "speaker": "RIA",
      "en": "After that, I answer to the council.",
      "zh": "之后，由我向议会交代。"
     },
     {
-     "start": 6.04,
-     "end": 6.93,
+     "start": 6.24,
+     "end": 6.87,
      "speaker": "RIA",
      "en": "Not you.",
      "zh": "不用你。"
@@ -1297,15 +1297,15 @@
    "media_out": 5.04,
    "cues": [
     {
-     "start": 1.8,
-     "end": 2.93,
+     "start": 2.06,
+     "end": 3.23,
      "speaker": "RIA",
      "en": "Now smile.",
      "zh": "现在，笑一下。"
     },
     {
-     "start": 3.62,
-     "end": 4.59,
+     "start": 3.44,
+     "end": 4.77,
      "speaker": "RIA",
      "en": "The palace is watching.",
      "zh": "整个王宫都在看。"
@@ -1418,23 +1418,6 @@
    "media_in": 0,
    "media_out": 5.04,
    "cues": [],
-   "next": "L4i",
-   "interaction": null,
-   "ambient_only": false,
-   "ambient_bed": false,
-   "model": "bytedance/seedance-2.5",
-   "resolution": "480p native",
-   "bgm": "flirt"
-  },
-  {
-   "id": "L4i",
-   "episode": "03",
-   "src": "assets/video/L4i.mp4",
-   "poster": "assets/posters/L4i.jpg",
-   "duration": 1.6,
-   "media_in": 0,
-   "media_out": 1.6,
-   "cues": [],
    "next": "L5",
    "interaction": null,
    "ambient_only": false,
@@ -1453,15 +1436,15 @@
    "media_out": 6.04,
    "cues": [
     {
-     "start": 0,
-     "end": 2.27,
+     "start": 1.56,
+     "end": 3.29,
      "speaker": "RIA",
      "en": "A devastating loss.",
      "zh": "损失惨重。"
     },
     {
-     "start": 2.66,
-     "end": 5.05,
+     "start": 3.44,
+     "end": 5.45,
      "speaker": "RIA",
      "en": "I was very attached to that cushion.",
      "zh": "我对那个靠垫很有感情的。"
@@ -1597,8 +1580,8 @@
    "media_out": 5.04,
    "cues": [
     {
-     "start": 1.46,
-     "end": 4.11,
+     "start": 2.42,
+     "end": 4.77,
      "speaker": "RIA",
      "en": "The fins are terrible at keeping secrets.",
      "zh": "耳鳍实在不擅长保守秘密。"
@@ -1622,8 +1605,8 @@
    "media_out": 7.04,
    "cues": [
     {
-     "start": 4.76,
-     "end": 6.79,
+     "start": 4.88,
+     "end": 6.83,
      "speaker": "RIA",
      "en": "That's what happens when you look at me like that.",
      "zh": "你那样看着我，它们就会这样。"
@@ -1706,15 +1689,15 @@
    "media_out": 7.04,
    "cues": [
     {
-     "start": 1.72,
-     "end": 5.73,
+     "start": 1.0,
+     "end": 5.45,
      "speaker": "MIL",
      "en": "I'm going home, charging my phone, and explaining why we missed work.",
      "zh": "我要回家，给手机充电，再解释我们为什么旷工。"
     },
     {
-     "start": 5.94,
-     "end": 6.75,
+     "start": 5.62,
+     "end": 6.53,
      "speaker": "MIL",
      "en": "You coming?",
      "zh": "你走吗？"
@@ -1809,8 +1792,8 @@
    "media_out": 5.04,
    "cues": [
     {
-     "start": 2.22,
-     "end": 3.31,
+     "start": 3.68,
+     "end": 4.81,
      "speaker": "RIA",
      "en": "Want to see the reef?",
      "zh": "想去看珊瑚礁吗？"
@@ -1834,15 +1817,15 @@
    "media_out": 7.04,
    "cues": [
     {
-     "start": 2.76,
-     "end": 4.85,
+     "start": 1.74,
+     "end": 3.93,
      "speaker": "RIA",
      "en": "There's a dive suit for you in the changing room.",
      "zh": "更衣室里给你准备了潜水服。"
     },
     {
-     "start": 5.36,
-     "end": 6.85,
+     "start": 4.6,
+     "end": 6.17,
      "speaker": "RIA",
      "en": "I'll meet you at the water steps.",
      "zh": "我在水阶那儿等你。"
@@ -2106,20 +2089,20 @@
    "episode": "04",
    "src": "assets/video/M12.mp4",
    "poster": "assets/posters/M12.jpg",
-   "duration": 5.04,
+   "duration": 6.04,
    "media_in": 0,
-   "media_out": 5.04,
+   "media_out": 6.04,
    "cues": [
     {
-     "start": 0.01,
-     "end": 1.76,
+     "start": 0.4,
+     "end": 2.15,
      "speaker": "SKY",
      "en": "That light is my harbor.",
      "zh": "那盏灯是我的港口。"
     },
     {
-     "start": 2.45,
-     "end": 4.92,
+     "start": 2.84,
+     "end": 5.31,
      "speaker": "SKY",
      "en": "From here, it looks like it belongs to your world.",
      "zh": "从这里看，它好像属于你的世界。"
@@ -2163,20 +2146,20 @@
    "episode": "04",
    "src": "assets/video/M14.mp4",
    "poster": "assets/posters/M14.jpg",
-   "duration": 5.04,
+   "duration": 6.04,
    "media_in": 0,
-   "media_out": 5.04,
+   "media_out": 6.04,
    "cues": [
     {
-     "start": 2.52,
-     "end": 3.92,
+     "start": 2.6,
+     "end": 4.07,
      "speaker": "RIA",
      "en": "You're watching the sea.",
      "zh": "你在看海。"
     },
     {
-     "start": 3.94,
-     "end": 5.04,
+     "start": 4.5,
+     "end": 5.75,
      "speaker": "RIA",
      "en": "I'm watching you.",
      "zh": "我在看你。"
@@ -2195,20 +2178,20 @@
    "episode": "04",
    "src": "assets/video/M15.mp4",
    "poster": "assets/posters/M15.jpg",
-   "duration": 5.04,
+   "duration": 6.04,
    "media_in": 0,
-   "media_out": 5.04,
+   "media_out": 6.04,
    "cues": [
     {
-     "start": 0.09,
-     "end": 1.48,
+     "start": 0.3,
+     "end": 1.69,
      "speaker": "SKY",
      "en": "Your turn, then.",
      "zh": "那换我了。"
     },
     {
-     "start": 1.85,
-     "end": 4.92,
+     "start": 2.06,
+     "end": 5.13,
      "speaker": "SKY",
      "en": "Tonight, on land, you follow my lead.",
      "zh": "今晚上岸，你跟着我走。"
