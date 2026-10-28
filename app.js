@@ -113,7 +113,7 @@ async function probeTier(){
     const tHead = performance.now(), b = await r.blob(), dt = Math.max(.05, (performance.now() - tHead) / 1000);
     bw = b.size / 1024 / dt * 2;  // 播放时同时下 4 个，总带宽约为单个的 2 倍以上，这里取保守的 2 倍
   } catch(e){ bw = 0; }
-  tier = bw > 480 ? 'video-hd' : bw > 190 ? 'video' : 'video-lite';
+  tier = bw > 400 ? 'video-hd' : bw > 90 ? 'video' : 'video-lite';  // 轻量档只在网速极慢时用；切镜处有等待保护，不会镜头中间卡
   tierLocked = true; pump();
 }
 const variant = u => tier === 'video' ? u : u.replace('assets/video/', `assets/${tier}/`);
