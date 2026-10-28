@@ -104,7 +104,18 @@ const blobs = new Map(), loading = new Map(), failed = new Set(); let want = [];
 const cancel = k => { const c = loading.get(k); if (c){ c.abort(); loading.delete(k); } };
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
 // 自适应三档：按实测下载速度选择 高清（原生 480p，接近原片，约 2.5Mbps）/ 标准（480p，约 1Mbps）/ 轻量（360p，约 0.3Mbps）
-let bw = 0, tier = 'video-lite';  // bw：下载速度 KB/s（滑动平均）；先用轻量档快速起播，测到速度后再升到标准或高清
+// 清晰度全程统一（2026-10-28 用户）：打开页面时测一次网速，选定一档后整场不再切换
+let bw = 0, tier = 'video', tierLocked = false;
+async function probeTier(){
+  const t0 = performance.now();
+  try {
+    const r = await fetch(media('assets/video/O1.mp4') + '?probe=' + Date.now(), {cache: 'no-store'});
+    const tHead = performance.now(), b = await r.blob(), dt = Math.max(.05, (performance.now() - tHead) / 1000);
+    bw = b.size / 1024 / dt * 2;  // 播放时同时下 4 个，总带宽约为单个的 2 倍以上，这里取保守的 2 倍
+  } catch(e){ bw = 0; }
+  tier = bw > 480 ? 'video-hd' : bw > 190 ? 'video' : 'video-lite';
+  tierLocked = true; pump();
+}
 const variant = u => tier === 'video' ? u : u.replace('assets/video/', `assets/${tier}/`);
 const urlOf = k => variant(k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src);
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
@@ -129,7 +140,7 @@ function warm(root){
   pump();
 }
 function pump(){
-  if (!shots) return;
+  if (!shots || !tierLocked) return;
   const s = st.shot;
   if (s && front.dataset.id === s.id && !String(front.getAttribute('src')).startsWith('blob:')){
     const end = bufferedTo(front), full = end >= (front.duration || Infinity) - .3, ahead = end - front.currentTime;
@@ -150,11 +161,7 @@ function fetchOne(k){
       blobs.set(k, URL.createObjectURL(b));
       // 测速只算真正传输的时间（不算首字节前的等待）；并行时乘上同时在下的个数，得到总带宽
       const dt = (performance.now() - tHead) / 1000, kbs = b.size / 1024 / Math.max(.05, dt) * Math.max(1, loading.size);
-      if (b.size > 60000 && dt > .25) bw = bw ? bw * .6 + kbs * .4 : kbs;  // 从浏览器缓存瞬间读出的不算测速
-      // 需要的速度留 1.5 倍余量：高清约 320KB/s → 480 以上用高清；标准约 125KB/s → 190 以上用标准；更慢用轻量（带回差，避免来回跳）
-      if (bw > (tier === 'video-hd' ? 400 : 480)) tier = 'video-hd';
-      else if (bw > (tier === 'video-lite' ? 230 : 190)) tier = 'video';
-      else tier = 'video-lite';
+      if (b.size > 60000 && dt > .25) bw = bw ? bw * .6 + kbs * .4 : kbs;  // 只做记录，不再中途切换清晰度
     }).catch(e => { if (e.name !== 'AbortError') failed.add(k); })
     .finally(() => { if (loading.get(k) === ctl) loading.delete(k); pump(); });
 }
@@ -409,7 +416,7 @@ fetch('data.json').then(r => { if (!r.ok) throw Error('data'); return r.json(); 
   const moments = d.shots.filter(s => s.interaction).length;
   const mins = Math.round(EPS.reduce((a, e, i) => a + epLen(i), 0) / 60);
   $('meta').innerHTML = [T(`${EPS.length} 集`, `${EPS.length} episodes`), T(`${moments} 次互动`, `${moments} choices`), T(`约 ${mins} 分钟`, `≈${mins} min`), T('请打开声音', 'Sound on')].map(x => `<span>${x}</span>`).join('');
-  $('startBtn').disabled = false; renderEps();
+  $('startBtn').disabled = false; renderEps(); probeTier();
   try { const c = JSON.parse(store.get('save')); $('resumeBtn').hidden = !(c && shots[c.id] && c.version === d.version); } catch(e){}
 }).catch(() => toast(T('剧集数据加载失败，请刷新', 'Could not load the story. Please refresh.')));
 
