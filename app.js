@@ -149,8 +149,8 @@ function fetchOne(k){
     .then(b => {
       blobs.set(k, URL.createObjectURL(b));
       // 测速只算真正传输的时间（不算首字节前的等待）；并行时乘上同时在下的个数，得到总带宽
-      const kbs = b.size / 1024 / Math.max(.05, (performance.now() - tHead) / 1000) * Math.max(1, loading.size);
-      if (b.size > 60000) bw = bw ? bw * .6 + kbs * .4 : kbs;
+      const dt = (performance.now() - tHead) / 1000, kbs = b.size / 1024 / Math.max(.05, dt) * Math.max(1, loading.size);
+      if (b.size > 60000 && dt > .25) bw = bw ? bw * .6 + kbs * .4 : kbs;  // 从浏览器缓存瞬间读出的不算测速
       // 需要的速度留 1.5 倍余量：高清约 320KB/s → 480 以上用高清；标准约 125KB/s → 190 以上用标准；更慢用轻量（带回差，避免来回跳）
       if (bw > (tier === 'video-hd' ? 400 : 480)) tier = 'video-hd';
       else if (bw > (tier === 'video-lite' ? 230 : 190)) tier = 'video';
