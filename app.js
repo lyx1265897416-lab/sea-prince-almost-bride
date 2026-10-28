@@ -104,7 +104,7 @@ const blobs = new Map(), loading = new Map(), failed = new Set(); let want = [];
 const cancel = k => { const c = loading.get(k); if (c){ c.abort(); loading.delete(k); } };
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
 // 自适应三档：按实测下载速度选择 高清（原生 480p，接近原片，约 2.5Mbps）/ 标准（480p，约 1Mbps）/ 轻量（360p，约 0.3Mbps）
-let bw = 0, tier = 'video';  // bw：下载速度 KB/s（滑动平均）；首镜先用标准档，测到速度后再升降
+let bw = 0, tier = 'video-lite';  // bw：下载速度 KB/s（滑动平均）；先用轻量档快速起播，测到速度后再升到标准或高清
 const variant = u => tier === 'video' ? u : u.replace('assets/video/', `assets/${tier}/`);
 const urlOf = k => variant(k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src);
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
