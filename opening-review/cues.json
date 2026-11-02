@@ -1,0 +1,75 @@
+{
+ "duration": 69.36,
+ "cues": [
+  {
+   "s": 3.05,
+   "e": 5.8,
+   "sp": "MIL",
+   "en": "Skye, look! The water is glowing!",
+   "zh": "Skye，你看！海水在发光！"
+  },
+  {
+   "s": 11.5,
+   "e": 12.5,
+   "sp": "SKY",
+   "en": "Mila!",
+   "zh": "米粒！"
+  },
+  {
+   "s": 30.4,
+   "e": 32.8,
+   "sp": "SKY",
+   "en": "Where... am I?",
+   "zh": "这是……哪里？"
+  },
+  {
+   "s": 38.7,
+   "e": 41.7,
+   "sp": "SKY",
+   "en": "My friend. Yellow jacket. Where is she?",
+   "zh": "我朋友，穿黄外套的。她在哪？"
+  },
+  {
+   "s": 41.91,
+   "e": 48.04,
+   "sp": "VES",
+   "en": "She is safe. Visitors cannot enter this wing. Unregistered visitors are held,",
+   "zh": "她很安全。访客不得进入这一翼。未登记的访客会被扣留，"
+  },
+  {
+   "s": 48.04,
+   "e": 50.51,
+   "sp": "VES",
+   "en": "and their memory of this place is sealed.",
+   "zh": "关于这里的记忆，也会被封存。"
+  },
+  {
+   "s": 63.41,
+   "e": 64.51,
+   "sp": "RIA",
+   "en": "She is with me.",
+   "zh": "她跟我一起。"
+  },
+  {
+   "s": 64.96,
+   "e": 66.56,
+   "sp": "RIA",
+   "en": "My future bride.",
+   "zh": "我未来的新娘。"
+  }
+ ],
+ "cards": [
+  {
+   "t": 0.2,
+   "d": 2.6,
+   "en": "Saltpoint Coast · 6:12 AM",
+   "zh": "盐点港海岸 · 清晨 6:12"
+  },
+  {
+   "t": 27.5,
+   "d": 2.6,
+   "en": "The Tidal Gate · a palace beneath the sea",
+   "zh": "潮门 · 藏在海下的王宫"
+  }
+ ]
+}
