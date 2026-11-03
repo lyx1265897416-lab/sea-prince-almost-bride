@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090f19">
+<title>Almost Bride Opening</title>
+<style>
+:root{--bg:#090f19;--ink:#eef2f7;--dim:#a9b6c6;--ice:#9fd4ec;--line:rgba(190,220,240,.28)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+#stage{position:relative;margin:0 auto;height:100dvh;aspect-ratio:9/16;max-width:100vw;background:#000;overflow:hidden}
+video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#subs{position:absolute;left:16px;right:16px;bottom:15%;text-align:center;font-size:16px;font-weight:500;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.55)}
+#card{position:absolute;left:16px;right:16px;top:44%;text-align:center;font-size:18px;letter-spacing:.04em;pointer-events:none;opacity:0;transition:opacity .35s;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 18px rgba(0,0,0,.6)}
+#card.on{opacity:1}
+#start{position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,10,18,.45);border:0;color:inherit;cursor:pointer;font:inherit}
+#start span{display:flex;align-items:center;gap:8px;padding:12px 26px;border-radius:999px;background:rgba(9,15,25,.72);border:1px solid var(--line)}
+#start[hidden]{display:none}
+#bar{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:10px;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(5,10,18,.72));font-size:12px;color:var(--dim)}
+#bar[hidden]{display:none}
+#bar button{background:none;border:0;color:var(--ink);font:inherit;cursor:pointer;min-width:32px;height:32px}
+#track{flex:1;height:32px;display:flex;align-items:center;cursor:pointer;touch-action:none}
+#track i{display:block;position:relative;width:100%;height:3px;border-radius:3px;background:rgba(255,255,255,.28)}
+#track b{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ice);border-radius:3px}
+#sheet{position:absolute;left:0;right:0;bottom:0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(5,10,18,.92) 28%);display:none}
+#sheet.on{display:block}
+#sheet .cue{font-size:13px;color:var(--dim);margin:0 0 10px}
+#sheet .opt{display:block;width:100%;min-height:44px;margin:0 0 8px;padding:10px 14px;text-align:left;color:var(--ink);font:inherit;background:rgba(14,24,38,.82);border:1px solid var(--line);border-radius:12px}
+#sheet input{width:100%;min-height:44px;padding:10px 14px;color:var(--ink);font:inherit;background:rgba(14,24,38,.55);border:1px solid var(--line);border-radius:12px}
+#sheet input::placeholder{color:var(--dim)}
+#again{display:block;margin:10px auto 0;background:none;border:0;color:var(--ice);font:inherit;cursor:pointer;min-height:32px}
+</style>
+</head><body>
+<div id="stage">
+  <video id="v" playsinline webkit-playsinline preload="auto" poster="poster.jpg" src="opening.mp4?v=1"></video>
+  <div id="card"></div>
+  <div id="subs" aria-live="polite"></div>
+  <div id="bar" hidden>
+    <button id="pp" aria-label="Pause">❚❚</button>
+    <span id="time">0:00 / 0:00</span>
+    <div id="track" role="slider" aria-label="Progress" tabindex="0"><i><b id="fill"></b></i></div>
+    <button id="spd" aria-label="Playback speed">1.0x</button>
+  </div>
+  <section id="sheet" aria-label="Your choice">
+    <p class="cue" id="cue"></p>
+    <button class="opt" id="o1"></button>
+    <button class="opt" id="o2"></button>
+    <input id="say" maxlength="120">
+    <button id="again"></button>
+  </section>
+  <button id="start"><span id="startT"></span></button>
+</div>
+<script>
+const q = new URLSearchParams(location.search).get('lang');
+const zh = q ? q === 'zh' : (navigator.language || '').toLowerCase().startsWith('zh');
+document.documentElement.lang = zh ? 'zh' : 'en';
+const T = zh ? {start:'▶ 播放开场', cue:'他当着维萨的面，替你说了一个你没答应过的身份。', o1:'先配合，找朋友要紧', o2:'当场反问', say:'或者，用你自己的话对他说…', again:'再看一遍'}
+             : {start:'▶ Play the opening', cue:'In front of Vessa, he just gave you a title you never agreed to.', o1:'Play along—for now', o2:'Call his bluff', say:'Or say it to him in your own words…', again:'Watch again'};
+const $ = id => document.getElementById(id);
+$('startT').textContent = T.start; $('cue').textContent = T.cue; $('o1').textContent = T.o1; $('o2').textContent = T.o2; $('say').placeholder = T.say; $('again').textContent = T.again;
+const v = $('v'), lang = zh ? 'zh' : 'en';
+let data = {cues: [], cards: []};
+fetch('cues.json?v=1').then(r => r.json()).then(d => data = d);
+const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+function tick() {
+  const t = v.currentTime, d = v.duration || data.duration || 0;
+  const c = data.cues.find(x => t >= x.s && t < x.e);
+  $('subs').textContent = c ? c[lang] : '';
+  const k = data.cards.find(x => t >= x.t && t < x.t + x.d);
+  if (k) $('card').textContent = k[lang];
+  $('card').classList.toggle('on', !!k);
+  $('fill').style.width = (d ? t / d * 100 : 0) + '%';
+  $('time').textContent = fmt(t) + ' / ' + fmt(d);
+  $('pp').textContent = v.paused ? '▶' : '❚❚';
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+function play() { $('start').hidden = true; $('bar').hidden = false; $('sheet').classList.remove('on'); v.play(); }
+$('start').onclick = play;
+$('pp').onclick = () => v.paused ? v.play() : v.pause();
+v.onclick = () => { if (!$('sheet').classList.contains('on')) v.paused ? v.play() : v.pause(); };
+v.onended = () => { $('bar').hidden = true; $('subs').textContent = ''; $('sheet').classList.add('on'); };
+$('again').onclick = () => { v.currentTime = 0; play(); };
+const speeds = [1, 1.25, 1.5, 0.75]; let si = 0;
+$('spd').onclick = () => { si = (si + 1) % speeds.length; v.playbackRate = speeds[si]; $('spd').textContent = speeds[si].toFixed(speeds[si] % 1 ? 2 : 1) + 'x'; };
+function seek(e) { const r = $('track').getBoundingClientRect(); v.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * (v.duration || 0); }
+$('track').addEventListener('pointerdown', e => { $('track').setPointerCapture(e.pointerId); seek(e); });
+$('track').addEventListener('pointermove', e => { if (e.buttons) seek(e); });
+</script>
+</body></html>
