@@ -1,5 +1,5 @@
 {
- "duration": 78.75,
+ "duration": 78.35,
  "cues": [
   {
    "s": 3.0,
@@ -9,50 +9,50 @@
    "zh": "Skye，你看！海水在发光！"
   },
   {
-   "s": 10.45,
-   "e": 11.15,
+   "s": 9.6,
+   "e": 10.25,
    "sp": "SKY",
    "en": "Mila!",
    "zh": "米拉！"
   },
   {
-   "s": 30.6,
-   "e": 32.85,
+   "s": 30.2,
+   "e": 32.45,
    "sp": "SKY",
    "en": "Where... am I?",
    "zh": "这是……哪里？"
   },
   {
-   "s": 40.7,
-   "e": 44.15,
+   "s": 40.3,
+   "e": 43.75,
    "sp": "SKY",
    "en": "My friend. Yellow jacket. Where is she?",
    "zh": "我朋友，穿黄外套的。她在哪？"
   },
   {
-   "s": 44.6,
-   "e": 50.7,
+   "s": 44.2,
+   "e": 50.3,
    "sp": "VES",
    "en": "She is safe. Visitors cannot enter this wing. Unregistered visitors are held,",
    "zh": "她很安全。访客不得进入这一翼。未登记的访客会被扣留，"
   },
   {
-   "s": 50.7,
-   "e": 53.15,
+   "s": 50.3,
+   "e": 52.75,
    "sp": "VES",
    "en": "and their memory of this place is sealed.",
    "zh": "关于这里的记忆，也会被封存。"
   },
   {
-   "s": 65.7,
-   "e": 67.15,
+   "s": 65.3,
+   "e": 66.75,
    "sp": "RIA",
    "en": "She is with me.",
    "zh": "她跟我一起。"
   },
   {
-   "s": 67.5,
-   "e": 69.0,
+   "s": 67.1,
+   "e": 68.6,
    "sp": "RIA",
    "en": "My future bride.",
    "zh": "我未来的新娘。"
@@ -66,7 +66,7 @@
    "zh": "盐点港海岸 · 清晨 6:12"
   },
   {
-   "t": 30.8,
+   "t": 30.4,
    "d": 2.6,
    "en": "The Tidal Gate · a palace beneath the sea",
    "zh": "潮门 · 藏在海下的王宫"
