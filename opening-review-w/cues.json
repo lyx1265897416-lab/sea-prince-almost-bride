@@ -1,5 +1,5 @@
 {
- "duration": 79.66,
+ "duration": 81.43,
  "cues": [
   {
    "s": 3.0,
@@ -16,43 +16,43 @@
    "zh": "米拉！"
   },
   {
-   "s": 31.51,
-   "e": 33.76,
+   "s": 33.28,
+   "e": 35.53,
    "sp": "SKY",
    "en": "Where... am I?",
    "zh": "这是……哪里？"
   },
   {
-   "s": 41.61,
-   "e": 45.06,
+   "s": 43.38,
+   "e": 46.83,
    "sp": "SKY",
    "en": "My friend. Yellow jacket. Where is she?",
    "zh": "我朋友，穿黄外套的。她在哪？"
   },
   {
-   "s": 45.51,
-   "e": 51.61,
+   "s": 47.28,
+   "e": 53.38,
    "sp": "VES",
    "en": "She is safe. Visitors cannot enter this wing. Unregistered visitors are held,",
    "zh": "她很安全。访客不得进入这一翼。未登记的访客会被扣留，"
   },
   {
-   "s": 51.61,
-   "e": 54.06,
+   "s": 53.38,
+   "e": 55.83,
    "sp": "VES",
    "en": "and their memory of this place is sealed.",
    "zh": "关于这里的记忆，也会被封存。"
   },
   {
-   "s": 66.61,
-   "e": 68.06,
+   "s": 68.38,
+   "e": 69.83,
    "sp": "RIA",
    "en": "She is with me.",
    "zh": "她跟我一起。"
   },
   {
-   "s": 68.41,
-   "e": 69.91,
+   "s": 70.18,
+   "e": 71.68,
    "sp": "RIA",
    "en": "My future bride.",
    "zh": "我未来的新娘。"
@@ -66,7 +66,7 @@
    "zh": "盐点港海岸 · 清晨 6:12"
   },
   {
-   "t": 31.71,
+   "t": 33.48,
    "d": 2.6,
    "en": "The Tidal Gate · a palace beneath the sea",
    "zh": "潮门 · 藏在海下的王宫"
