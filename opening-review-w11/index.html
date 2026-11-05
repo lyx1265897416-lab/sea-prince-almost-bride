@@ -32,7 +32,7 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:
 </style>
 </head><body>
 <div id="stage">
-  <video id="v" playsinline webkit-playsinline preload="auto" poster="poster.jpg" src="opening.mp4?v=1"></video>
+  <video id="v" playsinline webkit-playsinline preload="auto" poster="poster.jpg" src="opening.mp4?v=2"></video>
   <div id="card"></div>
   <div id="subs" aria-live="polite"></div>
   <div id="bar" hidden>
@@ -60,7 +60,7 @@ const $ = id => document.getElementById(id);
 $('startT').textContent = T.start; $('cue').textContent = T.cue; $('o1').textContent = T.o1; $('o2').textContent = T.o2; $('say').placeholder = T.say; $('again').textContent = T.again;
 const v = $('v'), lang = zh ? 'zh' : 'en';
 let data = {cues: [], cards: []};
-fetch('cues.json?v=1').then(r => r.json()).then(d => data = d);
+fetch('cues.json?v=2').then(r => r.json()).then(d => data = d);
 const fmt = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
 function tick() {
   const t = v.currentTime, d = v.duration || data.duration || 0;
