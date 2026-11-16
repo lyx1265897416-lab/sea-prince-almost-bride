@@ -103,21 +103,10 @@ function swap(){ const f = front; front = back; back = f; front.classList.add('o
 const blobs = new Map(), loading = new Map(), failed = new Set(); let want = [];
 const cancel = k => { const c = loading.get(k); if (c){ c.abort(); loading.delete(k); } };
 const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1) : 0;
-// 自适应三档：按实测下载速度选择 高清（原生 480p，接近原片，约 2.5Mbps）/ 标准（480p，约 1Mbps）/ 轻量（360p，约 0.3Mbps）
-// 清晰度全程统一（2026-10-28 用户）：打开页面时测一次网速，选定一档后整场不再切换
-let bw = 0, tier = 'video', tierLocked = false;
-async function probeTier(){
-  const t0 = performance.now();
-  try {
-    const r = await fetch(media('assets/video/O1.mp4') + '?probe=' + Date.now(), {cache: 'no-store'});
-    const tHead = performance.now(), b = await r.blob(), dt = Math.max(.05, (performance.now() - tHead) / 1000);
-    bw = b.size / 1024 / dt * 2;  // 播放时同时下 4 个，总带宽约为单个的 2 倍以上，这里取保守的 2 倍
-  } catch(e){ bw = 0; }
-  tier = bw > 400 ? 'video-hd' : bw > 90 ? 'video' : 'video-lite';  // 轻量档只在网速极慢时用；切镜处有等待保护，不会镜头中间卡
-  tierLocked = true; pump();
-}
-const variant = u => tier === 'video' ? u : u.replace('assets/video/', `assets/${tier}/`);
-const urlOf = k => variant(k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src);
+// Always play the final master. Network speed affects buffering only, never image quality.
+let bw = 0, tier = 'original', tierLocked = true;
+function probeTier(){ pump(); }
+const urlOf = k => k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src;
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
 function lookahead(root){
   const out = [root], seen = new Set([root]); let layer = [root];
