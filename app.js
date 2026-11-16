@@ -106,7 +106,7 @@ const bufferedTo = v => v.buffered.length ? v.buffered.end(v.buffered.length - 1
 // Always play the final master. Network speed affects buffering only, never image quality.
 let bw = 0, tier = 'original', tierLocked = true;
 function probeTier(){ pump(); }
-const urlOf = k => k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src;
+const urlOf = k => (k.endsWith('#idle') ? shots[k.slice(0, -5)].idle_src : shots[k].src) + '?quality=master-20261115';
 const srcFor = (id, isIdle) => blobs.get(isIdle ? id + '#idle' : id) || urlOf(isIdle ? id + '#idle' : id);
 function lookahead(root){
   const out = [root], seen = new Set([root]); let layer = [root];
